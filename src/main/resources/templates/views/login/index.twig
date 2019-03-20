@@ -16,8 +16,13 @@
   </div>
   <div class="form-row">
     <label for="password">Password:</label>
-    <input type="text" name="password" id="password" maxlength=20"" />
+    <input type="password" name="password" id="password" maxlength=20"" />
   </div>
+  {% if (loginError) %}
+  <div class="form-row error-row">
+    <p>Unable to log in. Please try again.</p>
+  </div>
+  {% endif %}
   <div class="form-row button-row">
     <button type="submit">Login</button>
   </div>

@@ -74,6 +74,10 @@ body {
 	margin-bottom: 0.5em;
 }
 
+#content > p {
+	margin-bottom: 0.5em;
+}
+
 #footer {
 	flex-shrink: 0;
 	height: 40px;

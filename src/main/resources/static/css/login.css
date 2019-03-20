@@ -6,6 +6,11 @@
 	margin-bottom: 4px;
 }
 
+#login-form .error-row {
+	margin: 24px 0;
+	color: #b2000b;
+}
+
 #login-form .button-row {
 	margin-top: 16px;
 }
