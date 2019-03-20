@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 	@GetMapping("/")
-	public String indexGet(ModelMap model) {
-		model.addAttribute("myvar", "myval");
+	public String indexGet(ModelMap model) {	
+		model.addAttribute("myvar", "vall");
+		
 		return "views/index/index";
 	}
 }

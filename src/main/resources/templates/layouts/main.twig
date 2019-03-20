@@ -3,7 +3,13 @@
 {%- block precontent -%}
 <div id="nav">
   <ul>
-    <li><a href="{{ path('/login') }}">Login</a></li>
+    <li>
+    {%- if (currentUser is null) -%}
+      <a href="{{ path('/login') }}">Login</a>
+    {%- else -%}
+      <a href="{{ path('/logout') }}">Log Out</a>
+    {%- endif -%}
+    </li>
   </ul>
 </div>
 {%- endblock -%}
