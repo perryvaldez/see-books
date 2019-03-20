@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.github.perryvaldez.seebooks.config.impl.DummyUserDetailsService;
 
@@ -34,13 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
    
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    	auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("USER")
-    	;
+    public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService uds) throws Exception {
+        auth.userDetailsService(uds)          
+        ;
     }
     
     @Bean
-    public UserDetailsService getUserDetailsService() {
-    	return new DummyUserDetailsService();
+    public PasswordEncoder getPasswordEncoder() {
+    	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+    
+    @Bean
+    public UserDetailsService getUserDetailsService(PasswordEncoder encoder) {
+    	return new DummyUserDetailsService(encoder);
     }
 }
