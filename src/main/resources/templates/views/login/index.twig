@@ -1,5 +1,25 @@
 {%- extends "../../layouts/no-nav.twig" -%}
 
+{%- block customheaders -%}
+
+<link rel="stylesheet" href="{{ path('/css/login.css') }}" />
+
+{%- endblock -%}
+
 {%- block content -%}
-<p>Login here.</p>
+<h1>Login</h1>
+
+<form id="login-form" method="post" action="{{ path('/login') }}">
+  <div class="form-row">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" maxlength="20" />
+  </div>
+  <div class="form-row">
+    <label for="password">Password:</label>
+    <input type="text" name="password" id="password" maxlength=20"" />
+  </div>
+  <div class="form-row button-row">
+    <button type="submit">Login</button>
+  </div>
+</form>
 {%- endblock -%}
