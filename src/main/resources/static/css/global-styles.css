@@ -1,0 +1,80 @@
+html, body, div, p, form, table, thead, tbody, tfoot, tr, th, td, header, footer, section, article,
+ul, ol, li, h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+}
+
+span, a {
+	display: inline-block;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: sans-serif;
+	font-size: 12pt;
+	display: flex;
+	flex-direction: column;
+}
+
+#header {
+	flex-shrink: 0;
+	height: 80px;
+	background-color: yellow;
+	padding: 0 4px;
+	display: flex;
+	align-items: center;
+}
+
+#header > h1 {
+	font-size: 36px;
+	font-weight: 600;
+}
+
+#nav {
+    flex-shrink: 0;
+    height: 26px;
+    background-color: #76f792;	
+    padding: 0 4px;
+    font-size: 14px;
+}
+
+#nav > ul {
+	list-style-type: none;
+	display: flex;
+	height: 100%;
+	flex-direction: row;
+}
+
+#nav > ul > li {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#nav > ul > li > a {
+	text-decoration: none;
+	margin-right: 8px;
+}
+
+#nav > ul > li:last-child > a {
+	margin-right: 0;
+}
+
+#content {
+	flex: 1 0 auto;
+	padding: 4px;
+}
+
+#footer {
+	flex-shrink: 0;
+	height: 40px;
+	font-size: 14px;
+	background-color: yellow;
+	padding: 0 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
