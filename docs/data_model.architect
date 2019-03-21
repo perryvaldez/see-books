@@ -4,7 +4,7 @@
  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="PostgreSQL SeeBooks" />
+   <property key="Logical" value="PostgreSQL SeeDB" />
    <property key="Connection Type" value="PostgreSQL" />
    <property key="JDBC URL" value="jdbc:postgresql://localhost:5432/seebooks_db" />
    <property key="UID" value="db_admin" />
@@ -16,8 +16,8 @@
    <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
   </data-source>
   <data-source id="DS0">
+   <property key="Logical" value="PostgreSQL SeeDB" />
    <property key="Connection Type" value="PostgreSQL" />
-   <property key="Logical" value="PostgreSQL SeeBooks" />
    <property key="JDBC URL" value="jdbc:postgresql://localhost:5432/seebooks_db" />
    <property key="UID" value="db_admin" />
    <property key="PWD" value="password" />
@@ -29,7 +29,7 @@
   </data-source>
  </project-data-sources>
  <source-databases>
-  <database id="DB0" populated="true" UUID="5411f113-1f78-4a84-8869-b3beb3711809" dbcs-ref="DS0" name="PostgreSQL SeeBooks" physicalName="PostgreSQL SeeBooks" >
+  <database id="DB0" populated="true" UUID="5411f113-1f78-4a84-8869-b3beb3711809" dbcs-ref="DS0" name="PostgreSQL SeeDB" physicalName="PostgreSQL SeeBooks" >
    <catalog id="CAT1" populated="false" UUID="18df4742-ad79-4a6f-a27c-23b454104c92" name="seebooks_db" nativeTerm="database" physicalName="seebooks_db" >
    </catalog>
    <relationships>
@@ -40,7 +40,7 @@
   <table id="TAB3" populated="true" UUID="f6c113b4-dc3c-439a-979f-3f6dc79ee1dd" name="User" objectType="TABLE" physicalName="tbl_users" >
    <remarks></remarks>
    <folder id="FOLTAB31" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL4" populated="true" UUID="25a74f98-9e54-452d-8a28-13bbbcad64a4" autoIncrement="false" autoIncrementSequenceName="tbl_users_id_seq" defaultValue="" name="ID" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL4" populated="true" UUID="25a74f98-9e54-452d-8a28-13bbbcad64a4" autoIncrement="false" autoIncrementSequenceName="tbl_users_id_seq" defaultValue="" name="ID" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
     <column id="COL5" populated="true" UUID="c4810cdc-3002-4836-af72-3664bc8abdbf" autoIncrement="false" autoIncrementSequenceName="tbl_users_email_seq" defaultValue="" name="Email" nullable="0" physicalName="email" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -66,7 +66,7 @@
   <table id="TAB11" populated="true" UUID="0278d1f1-589b-45d1-8b26-13e1fa274e3e" name="Role" objectType="TABLE" physicalName="tbl_roles" >
    <remarks></remarks>
    <folder id="FOLTAB111" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL12" populated="true" UUID="eda3cc55-f79c-49b5-a7b2-29a63428df15" autoIncrement="false" autoIncrementSequenceName="tbl_roles_id_seq" defaultValue="" name="ID" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL12" populated="true" UUID="eda3cc55-f79c-49b5-a7b2-29a63428df15" autoIncrement="false" autoIncrementSequenceName="tbl_roles_id_seq" defaultValue="" name="ID" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
     <column id="COL13" populated="true" UUID="3da99b30-3293-4528-ae0f-ff32869b0a39" autoIncrement="false" autoIncrementSequenceName="tbl_roles_name_seq" defaultValue="" name="Name" nullable="0" physicalName="name" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -89,10 +89,10 @@
   <table id="TAB18" populated="true" UUID="41d9ed0c-3868-4456-a6b5-eaf7975e77cb" name="UserRole" objectType="TABLE" physicalName="tbl_user_roles" >
    <remarks></remarks>
    <folder id="FOLTAB181" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL19" populated="true" UUID="3b5046ec-c39a-45c3-a0a7-aba9ec16d231" autoIncrement="false" autoIncrementSequenceName="tbl_roles_role_id_seq" defaultValue="" name="Role ID" nullable="0" physicalName="role_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL19" populated="true" UUID="3b5046ec-c39a-45c3-a0a7-aba9ec16d231" autoIncrement="false" autoIncrementSequenceName="tbl_roles_role_id_seq" defaultValue="" name="Role ID" nullable="0" physicalName="role_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
-    <column id="COL20" populated="true" UUID="87f224c1-d408-478a-91f3-7fa8b03ad540" autoIncrement="false" autoIncrementSequenceName="tbl_users_user_id_seq" defaultValue="" name="User ID" nullable="0" physicalName="user_id" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL20" populated="true" UUID="87f224c1-d408-478a-91f3-7fa8b03ad540" autoIncrement="false" autoIncrementSequenceName="tbl_users_user_id_seq" defaultValue="" name="User ID" nullable="0" physicalName="user_id" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
     </folder>
