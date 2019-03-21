@@ -26,5 +26,6 @@
   <div class="form-row button-row">
     <button type="submit">Login</button>
   </div>
+  <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
 </form>
 {%- endblock -%}

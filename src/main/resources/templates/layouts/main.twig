@@ -7,7 +7,10 @@
     {%- if (currentUser is null) -%}
       <a href="{{ path('/login') }}">Login</a>
     {%- else -%}
-      <a href="{{ path('/logout') }}">Log Out</a>
+      <form id="logout-form" method="post" action="{{ path('/logout') }}">
+        <button class="link-button" type="submit">Log Out</button>
+        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
+      </form>
     {%- endif -%}
     </li>
   </ul>

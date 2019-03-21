@@ -33,8 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	            .deleteCookies("JSESSIONID")
 	            .permitAll()
 	            .and()
-	        .csrf()
-	            .disable()
 	    ;
 	}
    

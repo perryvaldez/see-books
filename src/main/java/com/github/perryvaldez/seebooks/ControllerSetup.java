@@ -19,5 +19,6 @@ public class ControllerSetup {
 		}
 		
 		model.addAttribute("currentUser", currentUser);
+		model.addAttribute("_csrf", request.getAttribute("_csrf"));
 	}
 }
