@@ -1,5 +1,5 @@
 ALTER TABLE public.tbl_users ALTER COLUMN email TYPE VARCHAR(255);
-ALTER TABLE public.tbl_users ALTER COLUMN password TYPE VARCHAR(40);
+ALTER TABLE public.tbl_users ALTER COLUMN password TYPE VARCHAR(60);
 
 ALTER TABLE public.tbl_roles ALTER COLUMN name TYPE VARCHAR(20);
 
