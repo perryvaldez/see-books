@@ -22,7 +22,7 @@ body {
 #header {
 	flex-shrink: 0;
 	height: 80px;
-	background-color: yellow;
+	background-color: #6A48D7;
 	padding: 0 4px;
 	display: flex;
 	align-items: center;
@@ -31,12 +31,13 @@ body {
 #header > h1 {
 	font-size: 36px;
 	font-weight: 600;
+	color: #312164;
 }
 
 #nav {
     flex-shrink: 0;
     height: 26px;
-    background-color: #76f792;	
+    background-color: #3914AF;	
     padding: 0 4px;
     font-size: 14px;
 }
@@ -57,10 +58,15 @@ body {
 #nav > ul > li > a {
 	text-decoration: none;
 	margin-right: 8px;
+	color: #ffffff;
 }
 
 #nav > ul > li:last-child > a {
 	margin-right: 0;
+}
+
+#nav > ul > li > a:hover {
+	color: #c2bfcc;
 }
 
 #content {
@@ -72,17 +78,27 @@ body {
 	font-size: 1.5em;
 	font-weight: 600;
 	margin-bottom: 0.5em;
+	color: #412C84;
 }
 
 #content > p {
 	margin-bottom: 0.5em;
 }
 
+#content a:link, #content a:visited {
+	color: #6A48D7;
+}
+
+#content a:active {
+	color: #3914AF;
+}
+
 #footer {
 	flex-shrink: 0;
 	height: 40px;
 	font-size: 14px;
-	background-color: yellow;
+	background-color: #200772;
+	color: #ffffff;
 	padding: 0 4px;
 	display: flex;
 	align-items: center;
@@ -99,10 +115,14 @@ body {
 	margin: 0;
 	padding: 0;
 	background: none;
-	color: inherit;
+	color: #ffffff;
 	font: inherit;
 	cursor: pointer;
 	box-shadow: none;
 	border: none;
 	text-align: left;
+}
+
+.link-button:hover {
+	color: #c2bfcc;
 }
