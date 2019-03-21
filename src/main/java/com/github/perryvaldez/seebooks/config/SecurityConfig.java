@@ -42,12 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
     	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     
     @Bean
-    public UserDetailsService getUserDetailsService(PasswordEncoder encoder) {
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
     	return new DummyUserDetailsService(encoder);
     }
 }
