@@ -1,6 +1,11 @@
 package com.github.perryvaldez.seebooks.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,10 +16,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.github.perryvaldez.seebooks.config.impl.DummyUserDetailsService;
+import com.github.perryvaldez.seebooks.config.impl.DbUserDetailsService;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -35,19 +40,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    ;
 	}
    
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService uds) throws Exception {
-        auth.userDetailsService(uds)          
-        ;
-    }
-    
     @Bean
     public PasswordEncoder passwordEncoder() {
     	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     
+	@Value("${spring.datasource.url}")
+	private String dataSourceUrl;
+	
+	@Value("${spring.datasource.driver-class-name}")
+	private String dataDriverClass;
+	
+	@Value("${spring.datasource.username}")
+	private String dataUsername;
+	
+	@Value("${spring.datasource.password}")
+	private String dataPassword;
+	
+	public DataSource dataSource()
+	{
+		var dbu = DataSourceBuilder
+				.create()
+				.username(dataUsername)
+				.password(dataPassword)
+				.url(dataSourceUrl)
+				.driverClassName(dataDriverClass)
+				.build()
+				;
+		
+		return dbu;
+	}
+	   
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-    	return new DummyUserDetailsService(encoder);
+    	return new DbUserDetailsService(this.dataSource());
     }
+    
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth, @Qualifier("dbUserDetailsService") UserDetailsService uds) throws Exception {
+        auth.userDetailsService(uds)          
+        ;
+    }
+    
 }
