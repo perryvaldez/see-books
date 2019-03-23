@@ -1,8 +1,10 @@
 package com.github.perryvaldez.seebooks.models;
 
+import java.io.Serializable;
+
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 
-public interface User {
+public interface User extends Serializable {
   public KeyType getId();
   public void setId(KeyType id);
   

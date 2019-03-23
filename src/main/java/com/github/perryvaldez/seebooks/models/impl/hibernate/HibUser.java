@@ -13,6 +13,8 @@ import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 @Entity
 @Table(name = "tbl_users")
 public class HibUser implements User {
+	private static final long serialVersionUID = 20190223L;
+
 	@Column(name = "email", nullable = false, length = 255, unique = true)
 	private String email;
 	

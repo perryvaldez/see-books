@@ -4,6 +4,8 @@ import com.github.perryvaldez.seebooks.models.UserRole;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 
 public class HibUserRole implements UserRole {
+	private static final long serialVersionUID = 20190223L;
+	
 	private KeyType userId;
 	private KeyType roleId;
 

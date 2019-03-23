@@ -4,7 +4,9 @@ import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 
 public class HibRole implements Role {
-    private KeyType id;
+	private static final long serialVersionUID = 20190223L;
+	
+	private KeyType id;
     private String name;
     
 	@Override

@@ -3,7 +3,9 @@ package com.github.perryvaldez.seebooks.models.types.impl;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 
 public final class NumericKeyType implements KeyType {
-    final long value;
+	private static final long serialVersionUID = 20190223L;
+	
+	final long value;
     
     public NumericKeyType(long value) {
     	this.value = value;

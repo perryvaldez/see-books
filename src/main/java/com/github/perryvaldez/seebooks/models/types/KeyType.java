@@ -1,4 +1,6 @@
 package com.github.perryvaldez.seebooks.models.types;
 
-public interface KeyType {
+import java.io.Serializable;
+
+public interface KeyType extends Serializable {
 }
