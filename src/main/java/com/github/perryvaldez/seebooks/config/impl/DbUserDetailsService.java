@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
@@ -26,15 +28,28 @@ public class DbUserDetailsService implements UserDetailsService {
 	
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
+	private JpaUserRepository userRepository;
     
-	public DbUserDetailsService(DataSource dataSource) {
+	public DbUserDetailsService(DataSource dataSource, JpaUserRepository userRepository) {
 	    this.dataSource = dataSource;	    
-	    this.jdbcTemplate = new JdbcTemplate(this.dataSource);    
+	    this.jdbcTemplate = new JdbcTemplate(this.dataSource);  
+	    this.userRepository = userRepository;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User ud;
+		
+		try {
+			LOGGER.info("==== Using JPA user repository...");
+			
+			User u = this.userRepository.findByEmail(username);
+			LOGGER.info("==== Found user: " + u.getEmail() + ", pass: " + u.getPassword());
+			
+			LOGGER.info("==== Success using JPA user repository.");
+		} catch(Exception ex) {
+			LOGGER.error("==== Error using JPA user repository: ", ex);
+		}
 		
 		try {
 		    String sql = "select u.id, u.email, u.password from tbl_users u where email = ?";

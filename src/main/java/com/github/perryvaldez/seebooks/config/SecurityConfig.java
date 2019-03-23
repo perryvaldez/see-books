@@ -17,6 +17,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.github.perryvaldez.seebooks.config.impl.DbUserDetailsService;
+import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -72,8 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	   
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-    	return new DbUserDetailsService(this.dataSource());
+    public UserDetailsService userDetailsService(PasswordEncoder encoder, JpaUserRepository userRepository) {
+    	return new DbUserDetailsService(this.dataSource(), userRepository);
     }
     
     @Autowired
