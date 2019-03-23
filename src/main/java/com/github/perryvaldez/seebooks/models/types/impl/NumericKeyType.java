@@ -6,6 +6,10 @@ public final class NumericKeyType implements KeyType {
 	private static final long serialVersionUID = 20190223L;
 	
 	final long value;
+	
+	public NumericKeyType() {
+		this.value = 0;
+	}
     
     public NumericKeyType(long value) {
     	this.value = value;
@@ -17,7 +21,7 @@ public final class NumericKeyType implements KeyType {
     
     @Override
     public String toString() {
-    	return "" + this.value;
+    	return this.serialize();
     }
     
     @Override
@@ -30,4 +34,9 @@ public final class NumericKeyType implements KeyType {
     public int hashCode() {
     	return Long.hashCode(this.value);
     }
+
+	@Override
+	public String serialize() {
+		return "" + value;
+	}
 }
