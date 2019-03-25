@@ -14,5 +14,10 @@
     {%- endif -%}
     </li>
   </ul>
+  {%- if (currentUser is not null) -%}
+  <div class="current-user">
+    <a href="{{ path('/profile/' ~ url_encode(currentUser)) }}">{{ currentUser }}</a>
+  </div>
+  {%- endif -%}
 </div>
 {%- endblock -%}

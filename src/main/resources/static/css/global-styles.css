@@ -40,6 +40,9 @@ body {
     background-color: #3914AF;	
     padding: 0 4px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #nav > ul {
@@ -55,7 +58,7 @@ body {
     align-items: center;
 }
 
-#nav > ul > li > a {
+#nav > ul > li > a, #nav > .current-user > a {
 	text-decoration: none;
 	margin-right: 8px;
 	color: #ffffff;
@@ -65,7 +68,7 @@ body {
 	margin-right: 0;
 }
 
-#nav > ul > li > a:hover {
+#nav > ul > li > a:hover, #nav > .current-user > a:hover {
 	color: #c2bfcc;
 }
 
