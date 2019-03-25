@@ -2,7 +2,6 @@ package com.github.perryvaldez.seebooks.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -42,19 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
     	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-    
-	@Value("${spring.datasource.url}")
-	private String dataSourceUrl;
-	
-	@Value("${spring.datasource.driver-class-name}")
-	private String dataDriverClass;
-	
-	@Value("${spring.datasource.username}")
-	private String dataUsername;
-	
-	@Value("${spring.datasource.password}")
-	private String dataPassword;
-	  
+      
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder, UserService userService) {
     	return new DbUserDetailsService(userService);
