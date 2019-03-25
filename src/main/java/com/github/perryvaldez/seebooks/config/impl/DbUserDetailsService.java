@@ -1,71 +1,48 @@
 package com.github.perryvaldez.seebooks.config.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
+import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
-import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
-import com.github.perryvaldez.seebooks.models.types.KeyType;
-import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
+import com.github.perryvaldez.seebooks.services.UserService;
 
 @Service("dbUserDetailsService")
 public class DbUserDetailsService implements UserDetailsService {
 	private static final Logger LOGGER = LogManager.getLogger(DbUserDetailsService.class);
 	
-	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate;
-	private JpaUserRepository userRepository;
-    
-	public DbUserDetailsService(DataSource dataSource, JpaUserRepository userRepository) {
-	    this.dataSource = dataSource;	    
-	    this.jdbcTemplate = new JdbcTemplate(this.dataSource);  
-	    this.userRepository = userRepository;
+    private UserService userService;
+	
+	public DbUserDetailsService(UserService userService) {  
+	    this.userService = userService;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User ud;
-		
-		try {
-			LOGGER.info("==== Using JPA user repository...");
+		String[] rolesArray = new String[0];
 			
-			User u = this.userRepository.findByEmail(username);
-			LOGGER.info("==== Found user: " + u.getEmail() + ", pass: " + u.getPassword());
-			
-			LOGGER.info("==== Success using JPA user repository.");
-		} catch(Exception ex) {
-			LOGGER.error("==== Error using JPA user repository: ", ex);
-		}
-		
 		try {
-		    String sql = "select u.id, u.email, u.password from tbl_users u where email = ?";
-		    ud = (User) jdbcTemplate.queryForObject(sql, new Object[] { username }, 
-		    		new RowMapper<User>() {
-				        @Override
-				        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-				           User ud = new HibUser();
-				           ud.setEmail(rs.getString("email"));
-				           ud.setPassword(rs.getString("password"));
-				           
-				           KeyType id = new NumericKeyType(rs.getLong("id"));
-				           ud.setId(id);
-				           
-					       return ud;
-				        }});
+		    ud = this.userService.getUserByEmail(username);
+		    
+		    if (ud != null) {
+			    List<Role> roles = this.userService.getUserRoles(ud);
+			    
+			    List<String> roleNames = new ArrayList<String>();
+				for(var role: roles) {
+					roleNames.add(role.getName());
+				}
+				
+				rolesArray = roleNames.toArray(new String[0]);
+		    }
 			
 		} catch(Exception ex) {
 			LOGGER.error("==== Exception thrown by SQL query: ", ex);
@@ -74,7 +51,7 @@ public class DbUserDetailsService implements UserDetailsService {
 	    	
 	    if(ud != null) {
 			return new org.springframework.security.core.userdetails.User(username, ud.getPassword(), 
-                true, true, true, true, AuthorityUtils.createAuthorityList("USER"));	
+                true, true, true, true, AuthorityUtils.createAuthorityList(rolesArray));	
 	    }
 
         throw new UsernameNotFoundException("Unknown username: " + username);

@@ -82,4 +82,8 @@ public class HibUser implements User {
         inverseJoinColumns = {@JoinColumn(name = "role_enum")}
     )
 	private Set<HibRole> roles = new HashSet<>();
+    
+    public Set<HibRole> getRoles() {
+    	return this.roles;
+    }
 }
