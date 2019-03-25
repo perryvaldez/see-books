@@ -1,6 +1,5 @@
 package com.github.perryvaldez.seebooks.config.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,31 +28,23 @@ public class DbUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User ud;
 		String[] rolesArray = new String[0];
-			
+		
 		try {
 		    ud = this.userService.getUserByEmail(username);
 		    
-		    if (ud != null) {
-			    List<Role> roles = this.userService.getUserRoles(ud);
-			    
-			    List<String> roleNames = new ArrayList<String>();
-				for(var role: roles) {
-					roleNames.add(role.getName());
-				}
-				
-				rolesArray = roleNames.toArray(new String[0]);
+		    if (ud != null) {	    	
+		    	List<Role> roles = this.userService.getUserRoles(ud);
+		    	rolesArray = roles.stream().map(r -> r.getName()).toArray(String[]::new);
+		    	
+				return new org.springframework.security.core.userdetails.User(username, ud.getPassword(), 
+		                true, true, true, true, AuthorityUtils.createAuthorityList(rolesArray));	
 		    }
 			
 		} catch(Exception ex) {
 			LOGGER.error("==== Exception thrown by SQL query: ", ex);
-			ud = null;
+			throw ex;
 		}
 	    	
-	    if(ud != null) {
-			return new org.springframework.security.core.userdetails.User(username, ud.getPassword(), 
-                true, true, true, true, AuthorityUtils.createAuthorityList(rolesArray));	
-	    }
-
         throw new UsernameNotFoundException("Unknown username: " + username);
 	}
 }
