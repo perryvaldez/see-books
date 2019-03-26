@@ -33,9 +33,9 @@ CREATE UNIQUE INDEX unq_perm_actions_name
  ( name );
 
 CREATE TABLE public.tbl_roles (
-                enum INTEGER NOT NULL,
+                id BIGINT NOT NULL,
                 name VARCHAR NOT NULL,
-                CONSTRAINT pk_roles PRIMARY KEY (enum)
+                CONSTRAINT pk_roles PRIMARY KEY (id)
 );
 
 
@@ -45,7 +45,7 @@ CREATE UNIQUE INDEX unq_roles_name
 
 CREATE TABLE public.tbl_privileges (
                 id BIGINT NOT NULL,
-                role_enum INTEGER NOT NULL,
+                role_id BIGINT NOT NULL,
                 realm_id BIGINT NOT NULL,
                 action_enum INTEGER NOT NULL,
                 object_id BIGINT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE public.tbl_privileges (
 
 CREATE UNIQUE INDEX unq_privileges
  ON public.tbl_privileges
- ( role_enum, action_enum, object_id );
+ ( role_id, action_enum, object_id );
 
 CREATE TABLE public.tbl_users (
                 id BIGINT NOT NULL,
@@ -71,9 +71,9 @@ CREATE UNIQUE INDEX unq_users_email
  ( email );
 
 CREATE TABLE public.tbl_user_roles (
-                role_enum INTEGER NOT NULL,
+                role_id BIGINT NOT NULL,
                 user_id BIGINT NOT NULL,
-                CONSTRAINT pk_user_roles PRIMARY KEY (role_enum, user_id)
+                CONSTRAINT pk_user_roles PRIMARY KEY (role_id, user_id)
 );
 
 
@@ -99,15 +99,15 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.tbl_user_roles ADD CONSTRAINT fk_roles_user_roles
-FOREIGN KEY (role_enum)
-REFERENCES public.tbl_roles (enum)
+FOREIGN KEY (role_id)
+REFERENCES public.tbl_roles (id)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT
 NOT DEFERRABLE;
 
 ALTER TABLE public.tbl_privileges ADD CONSTRAINT fk_roles_privileges
-FOREIGN KEY (role_enum)
-REFERENCES public.tbl_roles (enum)
+FOREIGN KEY (role_id)
+REFERENCES public.tbl_roles (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
