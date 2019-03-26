@@ -79,7 +79,7 @@ public class HibUser implements User {
     @JoinTable(
         name = "tbl_user_roles", 
         joinColumns = {@JoinColumn(name = "user_id")}, 
-        inverseJoinColumns = {@JoinColumn(name = "role_enum")}
+        inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
 	private Set<HibRole> roles = new HashSet<>();
     

@@ -32,16 +32,16 @@ public class DbUserDetailsService implements UserDetailsService {
 		try {
 		    ud = this.userService.getUserByEmail(username);
 		    
-		    if (ud != null) {	    	
-		    	List<Role> roles = this.userService.getUserRoles(ud);
-		    	rolesArray = roles.stream().map(r -> r.getName()).toArray(String[]::new);
-		    	
+		    if (ud != null) {
+			    List<Role> roles = this.userService.getUserRoles(ud);
+				rolesArray = roles.stream().map(role -> role.getName()).toArray(String[]::new);
+
 				return new org.springframework.security.core.userdetails.User(username, ud.getPassword(), 
 		                true, true, true, true, AuthorityUtils.createAuthorityList(rolesArray));	
 		    }
 			
 		} catch(Exception ex) {
-			LOGGER.error("==== Exception thrown by SQL query: ", ex);
+			LOGGER.error("==== Exception thrown while retrieving user info: ", ex);
 			throw ex;
 		}
 	    	
