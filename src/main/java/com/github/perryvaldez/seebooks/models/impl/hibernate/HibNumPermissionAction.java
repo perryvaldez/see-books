@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.github.perryvaldez.seebooks.models.PermissionAction;
 
 @Entity
-@Table(name = "public.tbl_perm_actions")
+@Table(name = "tbl_perm_actions")
 public class HibNumPermissionAction implements PermissionAction {
 	private static final long serialVersionUID = 20190326L;
 

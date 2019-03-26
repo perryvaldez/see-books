@@ -4,7 +4,11 @@ import java.beans.Transient;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.github.perryvaldez.seebooks.models.Privilege;
@@ -12,7 +16,7 @@ import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 
 @Entity
-@Table(name = "public.tbl_privileges")
+@Table(name = "tbl_privileges")
 public class HibNumPrivilege implements Privilege {
 	private static final long serialVersionUID = 20190326L;
 	
@@ -20,20 +24,24 @@ public class HibNumPrivilege implements Privilege {
 	@Column(name = "id")
 	private long numId;
 
-	@Column(name = "role_id")
-	private long numRoleId;
-	
-	@Column(name = "realm_id")
-	private long numRealmId;
-
-	@Column(name = "action_enum")
-	private int actionEnum;
-
-	@Column(name = "object_id")
-	private long numObjectId;
-	
 	@Column(name = "owned_object_only")
 	private boolean ownedObjectOnly;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "action_enum", nullable = false, foreignKey = @ForeignKey(name = "fk_perm_actions_privileges"))
+    private HibNumPermissionAction action;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "object_id", nullable = false, foreignKey = @ForeignKey(name = "fk_perm_objects_privileges"))
+    private HibNumPermissionObject object;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "realm_id", nullable = false, foreignKey = @ForeignKey(name = "fk_realms_privileges"))
+    private HibNumRealm realm;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "role_id", nullable = false, foreignKey = @ForeignKey(name = "fk_roles_privileges"))
+    private HibNumRealm role;
 	
 	@Transient
 	@Override
@@ -87,14 +95,15 @@ public class HibNumPrivilege implements Privilege {
 		this.setNumObjectId(numKey.getValue());
 	}
 	
+	@Transient
 	@Override
 	public int getActionEnum() {
-		return this.actionEnum;
+		return this.action.getEnum();
 	}
 
+	@Transient
 	@Override
 	public void setActionEnum(int actionEnum) {
-		this.actionEnum = actionEnum;
 	}
 
 	@Override
@@ -107,28 +116,31 @@ public class HibNumPrivilege implements Privilege {
         this.ownedObjectOnly = ownedObjectOnly;
 	}
 
+	@Transient
 	public long getNumRoleId() {
-		return numRoleId;
+		return this.role.getNumId();
 	}
 
+	@Transient
 	public void setNumRoleId(long numRoleId) {
-		this.numRoleId = numRoleId;
 	}
 
+	@Transient
 	public long getNumRealmId() {
-		return numRealmId;
+		return this.realm.getNumId();
 	}
 
+	@Transient
 	public void setNumRealmId(long numRealmId) {
-		this.numRealmId = numRealmId;
 	}
 
+	@Transient
 	public long getNumObjectId() {
-		return numObjectId;
+		return this.object.getNumId();
 	}
 
+	@Transient
 	public void setNumObjectId(long numObjectId) {
-		this.numObjectId = numObjectId;
 	}
 
 	public long getNumId() {
@@ -137,5 +149,37 @@ public class HibNumPrivilege implements Privilege {
 
 	public void setNumId(long numId) {
 		this.numId = numId;
+	}
+	
+	public HibNumPermissionAction getAction() {
+		return action;
+	}
+
+	public void setAction(HibNumPermissionAction action) {
+		this.action = action;
+	}
+
+	public HibNumPermissionObject getObject() {
+		return object;
+	}
+
+	public void setObject(HibNumPermissionObject object) {
+		this.object = object;
+	}
+
+	public HibNumRealm getRealm() {
+		return realm;
+	}
+
+	public void setRealm(HibNumRealm realm) {
+		this.realm = realm;
+	}
+
+	public HibNumRealm getRole() {
+		return role;
+	}
+
+	public void setRole(HibNumRealm role) {
+		this.role = role;
 	}
 }

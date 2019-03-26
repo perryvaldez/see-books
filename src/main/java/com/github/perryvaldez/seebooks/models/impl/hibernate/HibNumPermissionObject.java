@@ -12,7 +12,7 @@ import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 
 @Entity
-@Table(name = "public.tbl_perm_objects")
+@Table(name = "tbl_perm_objects")
 public class HibNumPermissionObject implements PermissionObject {
 	private static final long serialVersionUID = 20190326L;
 	

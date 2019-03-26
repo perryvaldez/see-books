@@ -12,7 +12,7 @@ import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 
 @Entity
-@Table(name = "public.tbl_realms")
+@Table(name = "tbl_realms")
 public class HibNumRealm implements Realm {
 	private static final long serialVersionUID = 20190326L;
 	
