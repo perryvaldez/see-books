@@ -11,7 +11,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
+import com.github.perryvaldez.sebooks.utilities.Utils;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
+import com.github.perryvaldez.seebooks.models.Privilege;
 import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibRole;
@@ -61,5 +63,39 @@ public class DbNumUserService implements UserService {
 		}
 		
 		return roles;
+	}
+
+	@Override
+	public List<Privilege> getUserPrivileges(User user) {
+        var hibUser = (HibUser) user;
+        List<Privilege> privileges = new ArrayList<Privilege>();
+
+		Session session = null;
+		try {
+		    session = this.sessionFactory.openSession();
+		    hibUser = (HibUser) session.merge(hibUser);
+
+		    privileges = Utils.castList(session
+					.createQuery("select priv " + 
+		                 "from HibNumPrivilege as priv " + 
+							"join fetch priv.role as role " + 
+		                    "join fetch priv.realm as realm " + 
+							"join fetch priv.action as action " + 
+		                    "join fetch priv.object as object " + 
+							    "where role in (" + 
+		                            "select r from HibUser as user join user.roles as r " + 
+							            "where user = :user" + 
+							    ")")
+					.setParameter("user", hibUser)
+					.list())
+		    		;
+
+			return privileges;
+			
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
 	}
 }
