@@ -11,7 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.github.perryvaldez.seebooks.models.PermissionAction;
+import com.github.perryvaldez.seebooks.models.PermissionObject;
 import com.github.perryvaldez.seebooks.models.Privilege;
+import com.github.perryvaldez.seebooks.models.Realm;
+import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 
@@ -41,7 +45,7 @@ public class HibNumPrivilege implements Privilege {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "role_id", nullable = false, foreignKey = @ForeignKey(name = "fk_roles_privileges"))
-    private HibNumRealm role;
+    private HibRole role;
 	
 	@Transient
 	@Override
@@ -56,55 +60,7 @@ public class HibNumPrivilege implements Privilege {
 		this.setNumId(numKey.getValue());
 	}
 
-	@Transient
-	@Override
-	public KeyType getRoleId() {
-		return new NumericKeyType(this.getNumRoleId());
-	}
 
-	@Transient
-	@Override
-	public void setRoleId(KeyType roleId) {
-		var numKey = (NumericKeyType) roleId;
-		this.setNumRoleId(numKey.getValue());
-	}
-
-	@Transient
-	@Override
-	public KeyType getRealmId() {
-		return new NumericKeyType(this.getNumRealmId());
-	}
-
-	@Transient
-	@Override
-	public void setRealmId(KeyType realmId) {
-		var numKey = (NumericKeyType) realmId;
-		this.setNumRealmId(numKey.getValue());
-	}
-
-	@Transient
-	@Override
-	public KeyType getObjectId() {
-		return new NumericKeyType(this.getNumObjectId());
-	}
-
-	@Transient
-	@Override
-	public void setObjectId(KeyType objectId) {
-		var numKey = (NumericKeyType) objectId;
-		this.setNumObjectId(numKey.getValue());
-	}
-	
-	@Transient
-	@Override
-	public int getActionEnum() {
-		return this.action.getEnum();
-	}
-
-	@Transient
-	@Override
-	public void setActionEnum(int actionEnum) {
-	}
 
 	@Override
 	public boolean isOwnedObjectOnly() {
@@ -175,11 +131,35 @@ public class HibNumPrivilege implements Privilege {
 		this.realm = realm;
 	}
 
-	public HibNumRealm getRole() {
+	public HibRole getRole() {
 		return role;
 	}
 
-	public void setRole(HibNumRealm role) {
+	public void setRole(HibRole role) {
 		this.role = role;
+	}
+
+	@Override
+	public void setRole(Role role) {
+		this.role = (HibRole) role;
+		
+	}
+
+	@Override
+	public void setRealm(Realm realm) {
+		this.realm = (HibNumRealm) realm;
+		
+	}
+
+	@Override
+	public void setAction(PermissionAction action) {
+		this.action = (HibNumPermissionAction) action;
+		
+	}
+
+	@Override
+	public void setObject(PermissionObject object) {
+		this.object = (HibNumPermissionObject) object;
+		
 	}
 }

@@ -8,17 +8,17 @@ public interface Privilege extends Serializable {
     public KeyType getId();
     public void setId(KeyType id);
     
-    public KeyType getRoleId();
-    public void setRoleId(KeyType roleId);
+    public Role getRole();
+    public void setRole(Role role);
     
-    public KeyType getRealmId();
-    public void setRealmId(KeyType realmId);
+    public Realm getRealm();
+    public void setRealm(Realm realm);
     
-    public int getActionEnum();
-    public void setActionEnum(int actionEnum);
+    public PermissionAction getAction();
+    public void setAction(PermissionAction action);
     
-    public KeyType getObjectId();
-    public void setObjectId(KeyType objectId);
+    public PermissionObject getObject();
+    public void setObject(PermissionObject object);
     
     public boolean isOwnedObjectOnly();
     public void setOwnedObjectOnly(boolean ownedObjectOnly);
