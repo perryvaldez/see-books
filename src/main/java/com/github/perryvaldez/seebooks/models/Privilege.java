@@ -22,4 +22,6 @@ public interface Privilege extends Serializable {
     
     public boolean isOwnedObjectOnly();
     public void setOwnedObjectOnly(boolean ownedObjectOnly);
+    
+    public String serialize();
 }

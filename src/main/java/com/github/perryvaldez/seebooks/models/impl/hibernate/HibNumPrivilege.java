@@ -1,6 +1,8 @@
 package com.github.perryvaldez.seebooks.models.impl.hibernate;
 
 import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -161,5 +163,22 @@ public class HibNumPrivilege implements Privilege {
 	public void setObject(PermissionObject object) {
 		this.object = (HibNumPermissionObject) object;
 		
+	}
+
+	@Transient
+	@Override
+	public String serialize() {
+		List<String> parts = new ArrayList<String>();
+		parts.add(this.getRealm().getName());
+		parts.add(this.getAction().getName());
+		parts.add(this.getObject().getName());
+		parts.add(this.isOwnedObjectOnly() ? "own" : "any");
+		
+		return String.join("/", parts);
+	}
+	
+	@Override
+	public String toString() {
+		return this.serialize();
 	}
 }
