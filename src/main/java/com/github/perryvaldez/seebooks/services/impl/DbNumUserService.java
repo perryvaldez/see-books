@@ -2,6 +2,8 @@ package com.github.perryvaldez.seebooks.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
+import com.github.perryvaldez.seebooks.models.impl.hibernate.HibRole;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
 import com.github.perryvaldez.seebooks.services.UserService;
 
@@ -40,21 +43,16 @@ public class DbNumUserService implements UserService {
 	public List<Role> getUserRoles(User user) {
 		var hibUser = (HibUser) user;
 		List<Role> roles = new ArrayList<Role>();
-	
+		
 		Session session = null;
 		try {
 		    session = this.sessionFactory.openSession();
-		    var query = session
-		    		.createQuery("select r from HibUser u join u.roles r where u.numId = :numId")
-		    		.setParameter("numId", hibUser.getNumId())    
-		    		;
+		    hibUser = (HibUser) session.merge(hibUser);
 		    
-		    var list = query.getResultList();
+		    Set<HibRole> roleSet = hibUser.getRoles();
 		    
-			if(list != null && list.size() > 0) {			
-				for(var item : list) {
-					roles.add((Role) item);
-				}
+			if(roleSet != null && roleSet.size() > 0) {		
+				roles = roleSet.stream().collect(Collectors.toList());				
 			}
 		} finally {
 			if (session != null) {
