@@ -174,7 +174,7 @@ public class HibNumPrivilege implements Privilege {
 		parts.add(this.getObject().getName());
 		parts.add(this.isOwnedObjectOnly() ? "own" : "any");
 		
-		return String.join("/", parts);
+		return String.join(":", parts);
 	}
 	
 	@Override
