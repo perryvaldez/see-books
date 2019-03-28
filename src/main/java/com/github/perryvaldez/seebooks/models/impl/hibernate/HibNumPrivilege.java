@@ -172,7 +172,7 @@ public class HibNumPrivilege implements Privilege {
 		parts.add(this.getRealm().getName());
 		parts.add(this.getAction().getName());
 		parts.add(this.getObject().getName());
-		parts.add(this.isOwnedObjectOnly() ? "own" : "any");
+		parts.add(this.isOwnedObjectOnly() ? "own" : "*");
 		
 		return String.join(":", parts);
 	}
