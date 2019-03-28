@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.github.perryvaldez.seebooks.services.SecurityPrivilege;
 import com.github.perryvaldez.seebooks.services.SecurityService;
 import com.github.perryvaldez.seebooks.services.SecurityUtil;
 
@@ -23,17 +24,17 @@ public class DummySecurityService implements SecurityService {
 	}
 	
 	@Override
-	public boolean matchPrivilege(String requiredPrivilege, Authentication authentication) {
+	public boolean matchPrivilege(SecurityPrivilege requiredPrivilege, Authentication authentication) {
         return this.matchPrivileges(Arrays.asList(requiredPrivilege), authentication);
 	}
 
 	@Override
-	public boolean matchPrivileges(List<String> listOfRequiredPrivileges, Authentication authentication) {
+	public boolean matchPrivileges(List<SecurityPrivilege> listOfRequiredPrivileges, Authentication authentication) {
 		listOfRequiredPrivileges.stream().forEach(priv -> {
 			LOGGER.info("==== Matching privilege: required: " + priv);
 		});
 				
-		List<String> privileges = securityUtil.getPrivileges(authentication);
+		List<SecurityPrivilege> privileges = securityUtil.getPrivileges(authentication);
 		
 		if(privileges.size() == 0) {
             LOGGER.info("==== Matching privilege: None found: ");

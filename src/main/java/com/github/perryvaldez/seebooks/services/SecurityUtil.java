@@ -5,6 +5,6 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 
 public interface SecurityUtil {
-	public String makePrivilege(String realm, String action, String object, String owner);
-	public List<String> getPrivileges(Authentication authentication);
+	public SecurityPrivilege makePrivilege(String realm, String action, String object, String owner);
+	public List<SecurityPrivilege> getPrivileges(Authentication authentication);
 }
