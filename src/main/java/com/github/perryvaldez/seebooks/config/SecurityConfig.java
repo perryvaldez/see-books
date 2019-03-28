@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,10 +18,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.github.perryvaldez.seebooks.config.impl.DbUserDetailsService;
+import com.github.perryvaldez.seebooks.services.SecurityService;
+import com.github.perryvaldez.seebooks.services.SecurityUtil;
 import com.github.perryvaldez.seebooks.services.UserService;
+import com.github.perryvaldez.seebooks.services.impl.DefaultSecurityUtil;
+import com.github.perryvaldez.seebooks.services.impl.DummySecurityService;
 
 @Configuration
 @EnableWebSecurity(debug = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {	
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(SecurityConfig.class);
@@ -39,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	}
     	
 	    antMatches.permitAll()
+	            .antMatchers("/admin/{manageable}/**").access("@securityService.matchPrivileges({ @securityUtil.makePrivilege('*', 'can_manage', #manageable, '*'), @securityUtil.makePrivilege('*', 'can_view', #manageable, '*') }, authentication)")
 	            .anyRequest().authenticated()
 	            .and()
 	        .formLogin()
@@ -69,4 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
     
+    @Bean
+    public SecurityService securityService() {
+    	return new DummySecurityService(new DefaultSecurityUtil());
+    }
+    
+    @Bean
+    public SecurityUtil securityUtil() {
+    	return new DefaultSecurityUtil();
+    }
 }
