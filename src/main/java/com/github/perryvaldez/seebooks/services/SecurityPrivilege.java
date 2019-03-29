@@ -1,6 +1,7 @@
 package com.github.perryvaldez.seebooks.services;
 
 import java.io.Serializable;
+import java.util.List;
 
 public final class SecurityPrivilege implements Serializable {
 
@@ -18,6 +19,20 @@ public final class SecurityPrivilege implements Serializable {
 		this.owner = owner;
 	}
 	
+	public SecurityPrivilege(List<String> parts) {
+		this.realm = parts.get(0);
+		this.action = parts.get(1);
+		this.object = parts.get(2);
+		this.owner = parts.get(3);
+	}	
+
+	public SecurityPrivilege(String[] parts) {
+		this.realm = parts[0];
+		this.action = parts[1];
+		this.object = parts[2];
+		this.owner = parts[3];
+	}	
+
 	public String getRealm() {
 		return realm;
 	}
