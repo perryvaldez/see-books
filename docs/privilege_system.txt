@@ -1,0 +1,2 @@
+realm:action:object:owner  --> (realm or *):(action or *):(object or *):(owner or *)
+
