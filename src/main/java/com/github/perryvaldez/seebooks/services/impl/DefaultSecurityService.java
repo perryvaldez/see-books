@@ -13,14 +13,14 @@ import com.github.perryvaldez.seebooks.services.SecurityPrivilege;
 import com.github.perryvaldez.seebooks.services.SecurityService;
 import com.github.perryvaldez.seebooks.services.SecurityUtil;
 
-@Service("dummySecurityService")
-public class DummySecurityService implements SecurityService {
+@Service("defaultSecurityService")
+public class DefaultSecurityService implements SecurityService {
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LogManager.getLogger(DummySecurityService.class);
+	private static final Logger LOGGER = LogManager.getLogger(DefaultSecurityService.class);
 	
 	private SecurityUtil securityUtil;
 	
-	public DummySecurityService(SecurityUtil securityUtil) {
+	public DefaultSecurityService(SecurityUtil securityUtil) {
 		this.securityUtil = securityUtil;
 	}
 	
@@ -32,7 +32,7 @@ public class DummySecurityService implements SecurityService {
 	@Override
 	public boolean matchPrivileges(List<SecurityPrivilege> listOfRequiredPrivileges, Authentication authentication) {
 		listOfRequiredPrivileges.stream().forEach(priv -> {
-			LOGGER.info("==== Matching privilege: required: " + priv);
+			LOGGER.debug("==== Matching privilege: required: " + priv);
 		});
 				
 		List<SecurityPrivilege> userPrivileges = securityUtil.getPrivileges(authentication);
@@ -45,13 +45,13 @@ public class DummySecurityService implements SecurityService {
 				boolean ownerMatch = (this.securityUtil.matchPart(requiredPriv.getOwner(), userPriv.getOwner()));
 				
 				if (realmMatch && actionMatch && objectMatch && ownerMatch) {
-					LOGGER.info("==== User privilege " + userPriv + " matches required privilege " + requiredPriv);
+					LOGGER.debug("==== User privilege " + userPriv + " matches required privilege " + requiredPriv);
 					return true;
 				}		    	
 		    }	
 		}
 
-		LOGGER.info("==== User privileges do not match required privileges");
+		LOGGER.debug("==== User privileges do not match required privileges");
 		return false;
 	}
 

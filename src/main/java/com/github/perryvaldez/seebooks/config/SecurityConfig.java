@@ -22,7 +22,7 @@ import com.github.perryvaldez.seebooks.services.SecurityService;
 import com.github.perryvaldez.seebooks.services.SecurityUtil;
 import com.github.perryvaldez.seebooks.services.UserService;
 import com.github.perryvaldez.seebooks.services.impl.DefaultSecurityUtil;
-import com.github.perryvaldez.seebooks.services.impl.DummySecurityService;
+import com.github.perryvaldez.seebooks.services.impl.DefaultSecurityService;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     public SecurityService securityService() {
-    	return new DummySecurityService(new DefaultSecurityUtil());
+    	return new DefaultSecurityService(new DefaultSecurityUtil());
     }
     
     @Bean
