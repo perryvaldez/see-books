@@ -29,4 +29,9 @@ public class DefaultSecurityUtil implements SecurityUtil {
 				})
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public boolean matchPart(String required, String given) {
+		return (required.equals(given) || required.equals("*") || given.equals("*"));
+	}
 }

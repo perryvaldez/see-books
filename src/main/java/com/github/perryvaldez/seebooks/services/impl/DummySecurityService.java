@@ -34,16 +34,23 @@ public class DummySecurityService implements SecurityService {
 			LOGGER.info("==== Matching privilege: required: " + priv);
 		});
 				
-		List<SecurityPrivilege> privileges = securityUtil.getPrivileges(authentication);
+		List<SecurityPrivilege> userPrivileges = securityUtil.getPrivileges(authentication);
 		
-		if(privileges.size() == 0) {
-            LOGGER.info("==== Matching privilege: None found: ");
-		} else {
-			privileges.stream().forEach(auth -> {
-				LOGGER.info("==== Matching privilege: found: " + auth);
-			});			
+		for(SecurityPrivilege requiredPriv : listOfRequiredPrivileges) {
+		    for(SecurityPrivilege userPriv : userPrivileges) {
+				boolean realmMatch = (this.securityUtil.matchPart(requiredPriv.getRealm(), userPriv.getRealm()));
+				boolean actionMatch = (this.securityUtil.matchPart(requiredPriv.getAction(), userPriv.getAction()));
+				boolean objectMatch = (this.securityUtil.matchPart(requiredPriv.getObject(), userPriv.getObject()));
+				boolean ownerMatch = (this.securityUtil.matchPart(requiredPriv.getOwner(), userPriv.getOwner()));
+				
+				if (realmMatch && actionMatch && objectMatch && ownerMatch) {
+					LOGGER.info("==== User privilege " + userPriv + " matches required privilege " + requiredPriv);
+					return true;
+				}		    	
+		    }	
 		}
 
-		return true;
+		LOGGER.info("==== User privileges do not match required privileges");
+		return false;
 	}
 }
