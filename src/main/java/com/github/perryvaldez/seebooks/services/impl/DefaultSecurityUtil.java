@@ -1,5 +1,6 @@
 package com.github.perryvaldez.seebooks.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,10 @@ public class DefaultSecurityUtil implements SecurityUtil {
 				.map(auth -> ((SimpleGrantedAuthority) auth).getAuthority())
 				.collect(Collectors.toList())
 				;
+		
+		if(privStrings.size() > 0 && privStrings.get(0).equals("ROLE_ANONYMOUS")) {
+			return new ArrayList<SecurityPrivilege>();  // Zero items
+		}
 		
 		return privStrings.stream()
 				.map(privString -> {
