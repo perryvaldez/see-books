@@ -4,11 +4,19 @@
 <h1>Welcome Page</h1>
 <p>Welcome to SeeBooks!</p>
 
-<div class="page-section">
-  <h2>Administration</h2>
-  <ul>
-    <li><a href="{{ path('/admin/users') }}">Manage Users</a></li>
-    <li><a href="{{ path('/admin/businesses') }}">Manage Businesses</a></li>
-  </ul>
-</div>
+{%- if (showAdminSection) -%}
+    <div class="page-section">
+      <h2>Administration</h2>
+      <ul>
+        {%- if (showManageUsers) -%}
+        <li><a href="{{ path('/admin/users') }}">Manage Users</a></li>
+        {%- endif -%}
+        
+        {%- if (showManageBusinesses) -%}
+        <li><a href="{{ path('/admin/businesses') }}">Manage Businesses</a></li>
+        {%- endif -%}
+      </ul>
+    </div> 
+{%- endif -%}
+    
 {%- endblock -%}
