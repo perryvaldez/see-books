@@ -2,6 +2,7 @@ package com.github.perryvaldez.seebooks.services.impl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,5 +53,16 @@ public class DummySecurityService implements SecurityService {
 
 		LOGGER.info("==== User privileges do not match required privileges");
 		return false;
+	}
+
+	@Override
+	public boolean matchPrivilege(Authentication authentication, List<String> requiredPrivilege) {
+		return this.matchPrivilege(new SecurityPrivilege(requiredPrivilege), authentication);
+	}
+
+	@Override
+	public boolean matchPrivileges(Authentication authentication, List<List<String>> listOfRequiredPrivileges) {
+		List<SecurityPrivilege> list = listOfRequiredPrivileges.stream().map(part -> new SecurityPrivilege(part)).collect(Collectors.toList()); 
+		return this.matchPrivileges(list, authentication);		
 	}
 }
