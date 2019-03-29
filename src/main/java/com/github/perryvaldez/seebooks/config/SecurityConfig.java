@@ -45,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	}
     	
 	    antMatches.permitAll()
-	            .antMatchers("/admin/users/**").access("@securityService.matchPrivileges({ @securityUtil.makePrivilege('*', 'can_manage', 'user', '*') }, authentication)")
-	            .antMatchers("/admin/businesses/**").access("@securityService.matchPrivileges({ @securityUtil.makePrivilege('*', 'can_manage', 'business', '*') }, authentication)")
+	            .antMatchers("/admin/users/**").access("@securityService.matchPrivileges(authentication, { { '*', 'can_manage', 'user', '*' }, { '*', 'can_view', 'user', '*' } })")
+	            .antMatchers("/admin/businesses/**").access("@securityService.matchPrivilege(authentication, { '*', 'can_manage', 'business', '*' })")
 	            .anyRequest().authenticated()
 	            .and()
 	        .formLogin()
