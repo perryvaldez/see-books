@@ -31,3 +31,8 @@ HELP.md
 **/*.architect~
 **/*.cmd
 
+**/node_modules/
+node/**
+.yo-rc.json
+src/main/resources/static/js/main.**
+
