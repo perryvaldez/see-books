@@ -23,6 +23,7 @@ const path = require('path');
  */
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   mode: 'development',
@@ -30,9 +31,17 @@ module.exports = {
   module: {
     rules: [
       {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+      },
+      {
         test: /\.js$/,
         include: [path.resolve(__dirname, '../src/main/js')],
         loader: 'babel-loader',
+        exclude: file => (
+        	    /node_modules/.test(file) &&
+        	    !/\.vue\.js/.test(file)
+        	  ),
         options: {
           plugins: ['syntax-dynamic-import'],
           presets: [
@@ -49,10 +58,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader',
-            options: {
-              sourceMap: true
-            }
+        	loader: 'vue-style-loader'
           },
           {
             loader: 'css-loader'
@@ -61,6 +67,10 @@ module.exports = {
       }
     ]
   },
+  
+  plugins: [
+    new VueLoaderPlugin()   
+  ],
 
   output: {
     chunkFilename: '[name].[chunkhash].js',
