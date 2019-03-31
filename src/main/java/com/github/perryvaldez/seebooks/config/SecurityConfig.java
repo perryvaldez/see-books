@@ -39,9 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl antMatches;
     	
     	if(dataSourceUrl.startsWith("jdbc:h2:mem:")) {
-    		antMatches = http.csrf().disable().authorizeRequests().antMatchers("/", "/css/*", "/h2-console/*");
+    		antMatches = http.csrf().disable().authorizeRequests().antMatchers("/", "/css/*", "/js/*", "/h2-console/*");
     	} else {
-    		antMatches = http.authorizeRequests().antMatchers("/", "/css/*");
+    		antMatches = http.authorizeRequests().antMatchers("/", "/css/*", "/js/*");
     	}
     	
 	    antMatches.permitAll()
