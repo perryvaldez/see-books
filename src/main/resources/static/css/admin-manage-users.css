@@ -1,0 +1,21 @@
+#user-table {
+  border-collapse: collapse;
+}
+
+#user-table td, #user-table th {
+  padding: 2px 4px;
+  border: solid 1px #c0c0c0;
+}
+
+#user-table td.id {
+   width: 40px;
+   text-align: right;
+}
+
+#user-table td.email {
+   width: 350px;
+}
+
+#user-table td.role {
+   width: 250px;
+}

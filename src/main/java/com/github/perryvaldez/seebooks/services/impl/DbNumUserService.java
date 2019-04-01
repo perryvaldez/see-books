@@ -18,6 +18,7 @@ import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibRole;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
+import com.github.perryvaldez.seebooks.models.types.UserWithRoles;
 import com.github.perryvaldez.seebooks.services.UserService;
 
 @Service("dbNumUserService")
@@ -97,5 +98,42 @@ public class DbNumUserService implements UserService {
 				session.close();
 			}
 		}
+	}
+
+	@Override
+	public List<User> getUsers() {
+		List<User> result = this.userRepository.findAll().stream().map(huser -> (User) huser).collect(Collectors.toList());
+		
+		return result;
+	}
+
+	@Override
+	public List<UserWithRoles> getUsersWithRoles() {
+		Session session = null;
+		List<UserWithRoles> userWithRolesList = new ArrayList<UserWithRoles>();
+		
+		try {
+		    session = this.sessionFactory.openSession();
+	
+		    List <HibUser> userList = Utils.castList(session.createQuery("select user from HibUser user join fetch user.roles as r").list());
+			
+		    userList.stream().forEach(user -> {
+		    	var ur = new UserWithRoles();
+		    	ur.setUser(user);
+		    	
+		    	user.getRoles().stream().forEach(role -> {
+		    		ur.getRoles().add(role.getName());
+		    	});
+		    	
+		    	userWithRolesList.add(ur);
+		    }); 
+		    
+			return userWithRolesList;
+		} finally {
+            if (session != null) {
+            	session.close();
+            }			
+		}
+
 	}
 }
