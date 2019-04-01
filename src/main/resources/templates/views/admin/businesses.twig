@@ -3,11 +3,9 @@
 {%- block content -%}
 <p>Manage Businesses</p>
 
-{% verbatim %}
 <div id="vapp">
-  <p>{{ message }}</p>
+  <p>$[ message ]</p>
 </div>
-{% endverbatim %}
 
 <p><a href="{{ path('/') }}">Home</a></p>
 {%- endblock -%}
@@ -16,7 +14,7 @@
  <script>
   seebooks.createVue({
     el: '#vapp',
-    data: { message: 'Hello from Vue!' },
+    data: { message: 'Hello from Vue again!' },
   });
  </script>
  
