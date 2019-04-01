@@ -4,9 +4,8 @@
     <meta charset="utf-8" />
     <title>SeeBooks</title>
     <link rel="stylesheet" href="{{ path('/css/global-styles.css') }}" />
-    
     <script src="{{ path('/js/main.js') }}?t={{ buildTimestamp }}"></script>
-    
+
     {%- block customheaders -%}
     {%- endblock -%}
   </head>
@@ -25,5 +24,7 @@
         <p>Copyright &copy; 2019 Perry Valdez. All rights reserved.</p>
       </footer>
     </div>
+    {%- block postcontent -%}
+    {%- endblock -%}
   </body>
 </html>
