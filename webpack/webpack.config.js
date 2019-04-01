@@ -71,11 +71,18 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin()   
   ],
-
+  
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    }
+  },
+  
   output: {
     chunkFilename: '[name].[chunkhash].js',
     filename: '[name].js',
-    path: path.resolve(__dirname, '../src/main/resources/static/js')
+    path: path.resolve(__dirname, '../src/main/resources/static/js'),
+    library: 'seebooks',
   },
 
   optimization: {
