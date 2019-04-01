@@ -41,5 +41,9 @@
     "plugins": [
       "@babel/plugin-syntax-dynamic-import"
     ]
+  },
+  "dependencies": {
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.2"
   }
 }
