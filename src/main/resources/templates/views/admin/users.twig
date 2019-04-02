@@ -9,10 +9,15 @@
 {%- block content -%}
 <h1>Manage Users</h1>
 
+<p>Click on the ID to see more details about the user.</p>
+
+<div class="action-row">
+  <span class="action-link action-add" title="Add New User"><a href="{{ path('/admin/users/add') }}"><img src="{{ path('/images/icons8-plus-24.png') }}" alt="Add New User" /></a></span>
+</div>
 <table id="user-table">
   <thead>
     <tr>
-      <th>Action</th>
+      <th>Actions</th>
       <th>ID</th>
       <th>Email</th>
       <th>Roles</th>
@@ -26,8 +31,15 @@
   {% else %}
     {% for u in userList %}
       <tr>
-        <td></td>
-        <td class="id">{{ u.user.id }}</td>
+        <td>
+          <span class="action-link action-edit" title="Edit">
+            <a href="{{ path(concat('/admin/users/', u.user.id, '/edit')) }}"><img src="{{ path('/images/icons8-edit-24.png') }}" alt="Edit" /></a>
+          </span>
+          <span class="action-link action-delete" title="Delete">
+            <a href="{{ path(concat('/admin/users/', u.user.id, '/delete')) }}"><img src="{{ path('/images/icons8-delete-24.png') }}" alt="Delete" /></a>
+          </span>
+        </td>
+        <td class="id"><a href="{{ path(concat('/admin/users/', u.user.id)) }}">{{ u.user.id }}</a></td>
         <td class="email">{{ u.user.email }}</td>
         <td class="role">
         {{ join(u.roles, ", ") }}

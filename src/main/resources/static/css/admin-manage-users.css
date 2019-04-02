@@ -19,3 +19,15 @@
 #user-table td.role {
    width: 250px;
 }
+
+#user-table .action-link {
+   padding: 0 4px;
+}
+
+#user-table .action-link img {
+   border: none;
+}
+
+#user-table .action-link a {
+   text-decoration: none;
+}
