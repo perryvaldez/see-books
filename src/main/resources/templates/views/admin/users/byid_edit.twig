@@ -28,6 +28,16 @@
     <input type="password" id="confirm-password" name="confirmPassword" value="{{ userForm.confirmPassword }}" maxlength="20" />
   </div>
     
+  {%- if (length(globalErrors) > 0) -%} 
+  <div class="form-row error-row">
+      <ul>
+      {%- for err in globalErrors -%}
+          <li>{{ err }}</li>
+      {%- endfor -%}
+      </ul>
+  </div>
+  {%- endif -%} 
+    
   <div class="form-row button-row">
     <input type="submit" value="Save changes" />
   </div>  

@@ -1,6 +1,11 @@
 package com.github.perryvaldez.seebooks.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -72,25 +77,35 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/users/{id}/edit")
-	public ModelAndView usersPostByIdEdit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult bindResult, @PathVariable String id) {
+	public ModelAndView usersPostByIdEdit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult bindResult, ModelMap model) {
+		LOGGER.info("==== Checking if the form has errors...");
 		if(bindResult.hasErrors()) {
-			bindResult.getFieldErrors().stream().forEach(fieldError -> {
-		        LOGGER.error("==== Error in field '" + fieldError.getField() + "': " + fieldError.getDefaultMessage());
-			});    	
+		    List<String> globalErrors = bindResult.getGlobalErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList());
+		    
+		    Map<String, String> fieldErrors = new HashMap<String, String>();
+			bindResult.getFieldErrors().stream().forEach(item -> {
+				fieldErrors.put(item.getField(), item.getDefaultMessage());
+			});
+			
+			model.addAttribute("globalErrors", globalErrors);
+			model.addAttribute("fieldErrors", fieldErrors);
+			
+			return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
 		} else {
+			LOGGER.info("==== The form indeed has NO errors.");
 		    try (WorkSession workSession = this.uowManager.begin()) {			
-				KeyType key = this.keyUtil.makeKey(id);		
+				KeyType key = this.keyUtil.makeKey(userForm.getId());		
 				User user = this.userService.getUserById(key);
 				
 				user.setEmail(userForm.getEmail());
 				user.setPassword(userForm.getHashedPassword());
 				
 				this.userService.updateUser(workSession, user);
-				workSession.commit();	    	
+				workSession.commit();
+				
+				return new ModelAndView("redirect:/admin/users");
 		    }			
 		}
-		
-		return new ModelAndView("redirect:/admin/users");
 	}
 	
 	@GetMapping("/admin/businesses")
