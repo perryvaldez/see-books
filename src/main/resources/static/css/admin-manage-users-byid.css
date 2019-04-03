@@ -15,6 +15,10 @@
   margin-top: 20px;
 }
 
+#form-user .error-row {
+  margin-top: 20px;
+}
+
 #form-user #email {
   width: 380px;
 }
