@@ -12,6 +12,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
 import com.github.perryvaldez.sebooks.utilities.Utils;
+import com.github.perryvaldez.seebooks.datalayer.WorkSession;
+import com.github.perryvaldez.seebooks.datalayer.impl.HibWorkSession;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 import com.github.perryvaldez.seebooks.models.Privilege;
 import com.github.perryvaldez.seebooks.models.Role;
@@ -144,5 +146,12 @@ public class DbNumUserService implements UserService {
 		NumericKeyType numKeyId = (NumericKeyType) id;
 		var user = this.userRepository.findById(numKeyId.getValue());
 		return user;
+	}
+
+	@Override
+	public void updateUser(WorkSession workSession, User user) {
+        HibWorkSession ws = (HibWorkSession) workSession;
+        
+        ws.getSession().merge((HibUser) user);
 	}
 }

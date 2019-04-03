@@ -9,9 +9,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
+import com.github.perryvaldez.seebooks.datalayer.UnitOfWorkManager;
+import com.github.perryvaldez.seebooks.datalayer.WorkSession;
 import com.github.perryvaldez.seebooks.forms.UserForm;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
@@ -24,10 +27,12 @@ public class AdminController {
 	
     private UserService userService;
     private KeyUtilities keyUtil;
+    private UnitOfWorkManager uowManager;
 	
-	public AdminController(UserService userService, KeyUtilities keyUtil) {
+	public AdminController(UserService userService, KeyUtilities keyUtil, UnitOfWorkManager uowManager) {
     	this.userService = userService;
     	this.keyUtil = keyUtil;
+    	this.uowManager = uowManager;
     }
 	
 	@GetMapping("/admin/users")
@@ -49,6 +54,23 @@ public class AdminController {
 		userForm.setPassword("********");		
 					
 		return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
+	}
+	
+	@PostMapping("/admin/users/{id}/edit")
+	public ModelAndView usersPostByIdEdit(@PathVariable String id, @ModelAttribute("userForm") UserForm userForm) {
+		
+	    try (WorkSession workSession = this.uowManager.begin()) {			
+			KeyType key = this.keyUtil.makeKey(id);		
+			User user = this.userService.getUserById(key);
+			
+			user.setEmail(userForm.getEmail());
+			// user.setPassword(userForm.getPassword());
+			
+			this.userService.updateUser(workSession, user);
+			workSession.commit();	    	
+	    }
+		
+		return new ModelAndView("redirect:/admin/users");
 	}
 	
 	@GetMapping("/admin/businesses")
