@@ -5,15 +5,15 @@ import java.math.BigInteger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.github.perryvaldez.seebooks.datalayer.KeyGen;
+import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 
-public class DbNumericKeyGen implements KeyGen {
+public class DbNumericKeyUtilities implements KeyUtilities {
     @PersistenceContext
 	private EntityManager entityManager;
 
-	public DbNumericKeyGen() {}
+	public DbNumericKeyUtilities() {}
 	
 	@Override
 	public KeyType generateKey() {	

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.perryvaldez.seebooks.datalayer.KeyGen;
+import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
 import com.github.perryvaldez.seebooks.forms.UserForm;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
@@ -23,9 +23,9 @@ public class AdminController {
 	private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
 	
     private UserService userService;
-    private KeyGen keyUtil;
+    private KeyUtilities keyUtil;
 	
-	public AdminController(UserService userService, KeyGen keyUtil) {
+	public AdminController(UserService userService, KeyUtilities keyUtil) {
     	this.userService = userService;
     	this.keyUtil = keyUtil;
     }
