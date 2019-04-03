@@ -25,4 +25,22 @@ public class DbNumericKeyGen implements KeyGen {
 				
         return id;
 	}
+
+	@Override
+	public KeyType makeKey(Object key) {
+		NumericKeyType ret = null;
+		if (!(key instanceof String) && !((key instanceof Long))) {
+			throw new IllegalArgumentException("Invalid key: " + key);
+		} else if ((key instanceof Long)) {
+		    long numKey = (long) key;
+			ret = new NumericKeyType(numKey);
+			
+		} else { // key instanceof String
+			String strKey = (String) key;
+		    long numKey = Long.parseLong(strKey, 10);
+			ret = new NumericKeyType(numKey);
+		}
+		
+		return ret;
+	}
 }
