@@ -4,6 +4,7 @@ public class UserForm {
     private String id;
     private String email;
     private String password;
+    private boolean readOnly;
     
 	public String getId() {
 		return id;
@@ -27,5 +28,13 @@ public class UserForm {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 }

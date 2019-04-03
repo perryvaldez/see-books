@@ -8,5 +8,6 @@ import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
 
 public interface JpaUserRepository extends CrudRepository<HibUser, Long> {
     HibUser findByEmail(String email);
+    HibUser findById(long id);
     List<HibUser> findAll();
 }

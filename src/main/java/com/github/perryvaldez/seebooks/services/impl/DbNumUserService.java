@@ -18,7 +18,9 @@ import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibRole;
 import com.github.perryvaldez.seebooks.models.impl.hibernate.HibUser;
+import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.UserWithRoles;
+import com.github.perryvaldez.seebooks.models.types.impl.NumericKeyType;
 import com.github.perryvaldez.seebooks.services.UserService;
 
 @Service("dbNumUserService")
@@ -135,5 +137,12 @@ public class DbNumUserService implements UserService {
             }			
 		}
 
+	}
+
+	@Override
+	public User getUserById(KeyType id) {
+		NumericKeyType numKeyId = (NumericKeyType) id;
+		var user = this.userRepository.findById(numKeyId.getValue());
+		return user;
 	}
 }

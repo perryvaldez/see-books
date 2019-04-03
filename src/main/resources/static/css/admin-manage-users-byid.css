@@ -1,4 +1,24 @@
+#form-user {
+  margin-bottom: 1em;
+}
+
 #form-user label {
   display: inline-block;
+  width: 100px;
+}
+
+#form-user .form-row {
+  margin-bottom: 4px;
+}
+
+#form-user .button-row {
+  margin-top: 20px;
+}
+
+#form-user #email {
+  width: 380px;
+}
+
+#form-user #password {
   width: 200px;
 }
