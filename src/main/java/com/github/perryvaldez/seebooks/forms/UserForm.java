@@ -1,10 +1,19 @@
 package com.github.perryvaldez.seebooks.forms;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 public class UserForm {
     private String id;
+    
+    @Email(message = "Invalid email")
     private String email;
+    
+    @NotNull(message = "Password cannot be null")
     private String password;
-    private boolean readOnly;
+    
+    private String hashedPassword;
+    private String confirmPassword;
     
 	public String getId() {
 		return id;
@@ -30,11 +39,19 @@ public class UserForm {
 		this.password = password;
 	}
 
-	public boolean isReadOnly() {
-		return readOnly;
+	public String getHashedPassword() {
+		return hashedPassword;
 	}
 
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 }

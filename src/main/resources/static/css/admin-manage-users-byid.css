@@ -19,6 +19,6 @@
   width: 380px;
 }
 
-#form-user #password {
+#form-user #password, #form-user #confirm-password {
   width: 200px;
 }

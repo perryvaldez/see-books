@@ -23,7 +23,11 @@
     <label for="password">Password</label>
     <input type="password" id="password" name="password" value="{{ userForm.password }}" maxlength="20" />
   </div>
-  
+  <div class="form-row">
+    <label for="confirm-password">Confirm</label>
+    <input type="password" id="confirm-password" name="confirmPassword" value="{{ userForm.confirmPassword }}" maxlength="20" />
+  </div>
+    
   <div class="form-row button-row">
     <input type="submit" value="Save changes" />
   </div>  
