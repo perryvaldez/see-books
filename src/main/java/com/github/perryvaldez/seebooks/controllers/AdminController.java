@@ -1,7 +1,5 @@
 package com.github.perryvaldez.seebooks.controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.perryvaldez.sebooks.utilities.FormUtils;
 import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
 import com.github.perryvaldez.seebooks.datalayer.UnitOfWorkManager;
 import com.github.perryvaldez.seebooks.datalayer.WorkSession;
@@ -71,8 +70,11 @@ public class AdminController {
 		userForm.setId(id);
 		userForm.setEmail(user.getEmail());
 		userForm.setPassword("********");
+		userForm.setConfirmPassword("********");
 		userForm.setHashedPassword(user.getPassword());		
 					
+		FormUtils.saveFormOrigValues(userForm);
+		
 		return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
 	}
 	
