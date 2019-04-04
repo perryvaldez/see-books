@@ -2,9 +2,11 @@ package com.github.perryvaldez.sebooks.utilities;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.perryvaldez.seebooks.exceptions.DeserializeOperationException;
+import com.github.perryvaldez.seebooks.exceptions.InvokeReadMethodException;
+import com.github.perryvaldez.seebooks.exceptions.SerializeOperationException;
 import com.github.perryvaldez.seebooks.forms.FormPersistable;
 
 public final class FormUtils {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(FormUtils.class);
 	
 	private static boolean isRegularMethodName(String methodName) {
@@ -44,17 +55,15 @@ public final class FormUtils {
 		try {
 			String value = "" + pd.getReadMethod().invoke(form);
             String propName = derivePropertyName(methodName);
-
-			LOGGER.info("==== Discovered: " + propName + " = " + value);
-			
+		
 			pair = new NameValuePair();
 			pair.setName(propName);
 			pair.setValue(value);
 		
 		} catch (InvocationTargetException ex) {
-			LOGGER.error("An error occurred while saving form field values", ex);
+			throw new InvokeReadMethodException("An error occurred while saving form field values", ex);
 		} catch (IllegalAccessException ex) {
-			LOGGER.error("An error occurred while saving form field values", ex);
+			throw new InvokeReadMethodException("An error occurred while saving form field values", ex);
 		}
 		
 		return pair;
@@ -79,15 +88,57 @@ public final class FormUtils {
 		return ((a == null && b == null) || a.equals(b));
 	}
 	
+	private static String toBase64(String plain) {
+		return Base64.getEncoder().encodeToString(plain.getBytes());
+	}
+	
+	private static String fromBase64(String encoded) {
+		byte[] decodedBytes = Base64.getDecoder().decode(encoded);
+		String decodedString = new String(decodedBytes);
+		
+		return decodedString;
+	}
+	
+	private static String serializeMap(Map<String, String> map) {
+		var mapper = new ObjectMapper();
+		String value = "";
+		
+		try {
+			value = toBase64(mapper.writeValueAsString(map));
+		} catch (JsonProcessingException ex) {
+			throw new SerializeOperationException("An error occurred while serializing map: ", ex);
+		}
+		
+		return value;
+	}
+	
+	private static Map<String, String> deserializeMap(String serialized) {
+		var mapper = new ObjectMapper();
+		var typeRef = new TypeReference<Map<String, String>>() {};
+		Map<String, String> map = new HashMap<String, String>();
+		
+		try {
+			map = mapper.readValue(fromBase64(serialized), typeRef);
+		} catch (JsonParseException ex) {
+			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+		} catch (JsonMappingException ex) {
+			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+		} catch (IOException ex) {
+			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+		}
+		
+		return map;
+	}
+	
 	public static void saveFormOrigValues(FormPersistable form) {
 		Map<String, String> propMap = collectFormPropertiesAndValues(form);	
-        form.setSerializedOrigValues(propMap);        
+        form.setSerializedOrigValues(serializeMap(propMap));        
 	}
 	
 	public static List<String> getDirtyProperties(FormPersistable form) {
 		List<String> dirtyProps = new ArrayList<String>();
 		
-		Map<String, String> propMap = form.getSerializedOrigValues();
+		Map<String, String> propMap = deserializeMap(form.getSerializedOrigValues());
 		Map<String, String> newPropMap = collectFormPropertiesAndValues(form);
 		
 		propMap.keySet().stream().forEach(key -> {

@@ -9,6 +9,8 @@
 {%- block content -%}
 <h1>User Info</h1>
 
+{% autoescape 'html' %}
+
 <form id="form-user" method="post" action="{{ path(concat('/admin/users/', userForm.id, '/edit')) }}">
   <div class="form-row">
     <label for="id">ID</label>
@@ -41,8 +43,11 @@
   <div class="form-row button-row">
     <input type="submit" value="Save changes" />
   </div>  
+  <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
 </form>
+
+{% endautoescape %}
 
 <p><a href="{{ path('/admin/users') }}">Back</a> <a href="{{ path('/') }}">Home</a></p>
 {%- endblock -%}

@@ -1,7 +1,5 @@
 package com.github.perryvaldez.seebooks.forms;
 
-import java.util.Map;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -14,10 +12,9 @@ public class UserForm implements FormPersistable {
     @NotNull(message = "Password cannot be null")
     private String password;
     
-    private String hashedPassword;
     private String confirmPassword;
     
-    private Map<String, String> serializedOrigValues;
+    private String serializedOrigValues;
     
 	public String getId() {
 		return id;
@@ -43,14 +40,6 @@ public class UserForm implements FormPersistable {
 		this.password = password;
 	}
 
-	public String getHashedPassword() {
-		return hashedPassword;
-	}
-
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
-	}
-
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
@@ -60,12 +49,12 @@ public class UserForm implements FormPersistable {
 	}
 
 	@Override
-	public Map<String, String> getSerializedOrigValues() {
+	public String getSerializedOrigValues() {
 		return this.serializedOrigValues;
 	}
 
 	@Override
-	public void setSerializedOrigValues(Map<String, String> serializedOrigValues) {
+	public void setSerializedOrigValues(String serializedOrigValues) {
 		this.serializedOrigValues = serializedOrigValues;
 	}
 }

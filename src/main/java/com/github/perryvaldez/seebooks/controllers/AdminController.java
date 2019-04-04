@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -40,12 +41,16 @@ public class AdminController {
     private KeyUtilities keyUtil;
     private UnitOfWorkManager uowManager;
     private UserFormValidator userFormValidator;
+    private PasswordEncoder passwordEncoder;
 	
-	public AdminController(UserService userService, KeyUtilities keyUtil, UnitOfWorkManager uowManager, UserFormValidator userFormValidator) {
+	public AdminController(UserService userService, KeyUtilities keyUtil, UnitOfWorkManager uowManager, 
+			UserFormValidator userFormValidator, PasswordEncoder passwordEncoder) {
+		
     	this.userService = userService;
     	this.keyUtil = keyUtil;
     	this.uowManager = uowManager;
     	this.userFormValidator = userFormValidator;
+    	this.passwordEncoder = passwordEncoder;
     }
 	
 	@InitBinder("userForm")
@@ -69,10 +74,9 @@ public class AdminController {
 		
 		userForm.setId(id);
 		userForm.setEmail(user.getEmail());
-		userForm.setPassword("********");
-		userForm.setConfirmPassword("********");
-		userForm.setHashedPassword(user.getPassword());		
-					
+		userForm.setPassword("");
+		userForm.setConfirmPassword("");
+
 		FormUtils.saveFormOrigValues(userForm);
 		
 		return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
@@ -80,9 +84,11 @@ public class AdminController {
 	
 	@PostMapping("/admin/users/{id}/edit")
 	public ModelAndView usersPostByIdEdit(@Valid @ModelAttribute("userForm") UserForm userForm, BindingResult bindResult, ModelMap model) {
-		LOGGER.info("==== Checking if the form has errors...");
 		if(bindResult.hasErrors()) {
-		    List<String> globalErrors = bindResult.getGlobalErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList());
+		    List<String> globalErrors = bindResult.getGlobalErrors().stream()
+		    		.map(item -> item.getDefaultMessage())
+		    		.collect(Collectors.toList())
+		    		;
 		    
 		    Map<String, String> fieldErrors = new HashMap<String, String>();
 			bindResult.getFieldErrors().stream().forEach(item -> {
@@ -93,20 +99,36 @@ public class AdminController {
 			model.addAttribute("fieldErrors", fieldErrors);
 			
 			return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
-		} else {
-			LOGGER.info("==== The form indeed has NO errors.");
-		    try (WorkSession workSession = this.uowManager.begin()) {			
-				KeyType key = this.keyUtil.makeKey(userForm.getId());		
-				User user = this.userService.getUserById(key);
+		} else {		
+			List<String> dirtyProps = FormUtils.getDirtyProperties(userForm).stream()
+					.filter((p -> p == "email" || p == "password"))
+					.collect(Collectors.toList())
+					;
+			
+			if(dirtyProps.size() > 0) {			
+			    try (WorkSession workSession = this.uowManager.begin()) {			
+					KeyType key = this.keyUtil.makeKey(userForm.getId());		
+					User user = this.userService.getUserById(key);
+					
+					if(dirtyProps.contains("email")) {
+						user.setEmail(userForm.getEmail());	
+					}
+					
+					if(dirtyProps.contains("password")) {
+						user.setPassword(this.passwordEncoder.encode(userForm.getPassword()));	
+					}
+					
+					
+					this.userService.updateUser(workSession, user);
+					workSession.commit();
+					
+					return new ModelAndView("redirect:/admin/users");
+			    }			
 				
-				user.setEmail(userForm.getEmail());
-				user.setPassword(userForm.getHashedPassword());
-				
-				this.userService.updateUser(workSession, user);
-				workSession.commit();
-				
+			} else {
 				return new ModelAndView("redirect:/admin/users");
-		    }			
+			}
+			
 		}
 	}
 	
