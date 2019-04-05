@@ -36,15 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
     @Override
 	protected void configure(HttpSecurity http) throws Exception {   	
-    	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl antMatches;
+    	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry httpInit;
     	
     	if(dataSourceUrl.startsWith("jdbc:h2:mem:")) {
-    		antMatches = http.csrf().disable().authorizeRequests().antMatchers("/", "/css/*", "/js/*", "/images/*", "/h2-console/*");
+    		httpInit = http.csrf().disable()
+    				       .authorizeRequests()
+    				       .antMatchers("/h2-console/*").permitAll()
+    				       ;
     	} else {
-    		antMatches = http.authorizeRequests().antMatchers("/", "/css/*", "/js/*", "/images/*");
+    		httpInit = http.authorizeRequests();
     	}
-    	
-	    antMatches.permitAll()
+
+	    httpInit
+	            .antMatchers("/", "/css/*", "/js/*", "/images/*", "/loggedout").permitAll()
 	            .antMatchers("/admin/users/**").access("@securityService.matchPrivilege(authentication, { '*', 'can_manage', 'user', '*' })")
 	            .antMatchers("/admin/businesses/**").access("@securityService.matchPrivilege(authentication, { '*', 'can_manage', 'business', '*' })")
 	            .anyRequest().authenticated()
