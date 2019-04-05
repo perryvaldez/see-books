@@ -9,6 +9,7 @@
 {%- block content -%}
 <h1>Login</h1>
 
+{%- autoescape 'html' -%}
 <form id="login-form" method="post" action="{{ path('/login') }}">
   <div class="form-row">
     <label for="username">Username:</label>
@@ -16,7 +17,7 @@
   </div>
   <div class="form-row">
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password" maxlength=20"" />
+    <input type="password" name="password" id="password" maxlength="20" />
   </div>
   {% if (loginError) %}
   <div class="form-row error-row error">
@@ -28,4 +29,5 @@
   </div>
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
 </form>
+{%- endautoescape -%}
 {%- endblock -%}
