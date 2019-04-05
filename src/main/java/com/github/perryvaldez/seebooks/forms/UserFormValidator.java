@@ -8,6 +8,7 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserFormValidator implements Validator {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(UserFormValidator.class);
 	
 	@Override
@@ -19,10 +20,7 @@ public class UserFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		UserForm form = (UserForm) target;
  
-		LOGGER.info("==== Validating form...");
-		
 		if(form == null || !form.getPassword().equals(form.getConfirmPassword())) {
-			LOGGER.info("==== Password was mistyped");
 			errors.reject("ERR_PASSWD_NOT_MATCH_CONFIRM", "You mistyped your password.");
 		}
 	}
