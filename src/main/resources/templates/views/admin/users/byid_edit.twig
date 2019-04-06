@@ -29,6 +29,13 @@
     <label for="confirm-password">Confirm</label>
     <input type="password" id="confirm-password" name="confirmPassword" value="{{ userForm.confirmPassword }}" maxlength="20" />
   </div>
+  
+  <div class="form-row">
+    <p>Roles</p>
+    {%- for item in userForm.roleIds -%}
+      <div>Item: {{ item }}</div>
+    {%- endfor -%}
+  </div>
     
   {%- if (length(globalErrors) > 0) -%} 
   <div class="form-row error-row error">
