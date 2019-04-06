@@ -50,20 +50,14 @@ public class DbNumUserService implements UserService {
 	public List<Role> getUserRoles(User user) {
 		var hibUser = (HibUser) user;
 		List<Role> roles = new ArrayList<Role>();
-		
-		Session session = null;
-		try {
-		    session = this.sessionFactory.openSession();
+			
+		try (Session session = this.sessionFactory.openSession()) {
 		    hibUser = (HibUser) session.merge(hibUser);
 		    
 		    Set<HibRole> roleSet = hibUser.getRoles();
 		    
 			if(roleSet != null && roleSet.size() > 0) {		
 				roles = roleSet.stream().collect(Collectors.toList());				
-			}
-		} finally {
-			if (session != null) {
-				session.close();
 			}
 		}
 		
@@ -75,9 +69,7 @@ public class DbNumUserService implements UserService {
         var hibUser = (HibUser) user;
         List<Privilege> privileges = new ArrayList<Privilege>();
 
-		Session session = null;
-		try {
-		    session = this.sessionFactory.openSession();
+		try (Session session = this.sessionFactory.openSession()) {
 		    hibUser = (HibUser) session.merge(hibUser);
 
 		    privileges = Utils.castList(session
@@ -95,31 +87,28 @@ public class DbNumUserService implements UserService {
 					.list())
 		    		;
 
-			return privileges;
-			
-		} finally {
-			if (session != null) {
-				session.close();
-			}
+			return privileges;	
 		}
 	}
 
 	@Override
 	public List<User> getUsers() {
-		List<User> result = this.userRepository.findAll().stream().map(huser -> (User) huser).collect(Collectors.toList());
+		List<User> result = this.userRepository.findAll().stream()
+				.map(huser -> (User) huser)
+				.collect(Collectors.toList())
+				;
 		
 		return result;
 	}
 
 	@Override
 	public List<UserWithRoles> getUsersWithRoles() {
-		Session session = null;
 		List<UserWithRoles> userWithRolesList = new ArrayList<UserWithRoles>();
 		
-		try {
-		    session = this.sessionFactory.openSession();
-	
-		    List <HibUser> userList = Utils.castList(session.createQuery("select distinct user from HibUser user join fetch user.roles as r").list());
+		try (Session session = this.sessionFactory.openSession()) {
+		    List <HibUser> userList = Utils.castList(
+		    		session.createQuery("select distinct user from HibUser user join fetch user.roles as r")
+		    		.list());
 			
 		    userList.stream().forEach(user -> {
 		    	var ur = new UserWithRoles();
@@ -133,12 +122,7 @@ public class DbNumUserService implements UserService {
 		    }); 
 		    
 			return userWithRolesList;
-		} finally {
-            if (session != null) {
-            	session.close();
-            }			
 		}
-
 	}
 
 	@Override
