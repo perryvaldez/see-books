@@ -119,7 +119,7 @@ public class DbNumUserService implements UserService {
 		try {
 		    session = this.sessionFactory.openSession();
 	
-		    List <HibUser> userList = Utils.castList(session.createQuery("select user from HibUser user join fetch user.roles as r").list());
+		    List <HibUser> userList = Utils.castList(session.createQuery("select distinct user from HibUser user join fetch user.roles as r").list());
 			
 		    userList.stream().forEach(user -> {
 		    	var ur = new UserWithRoles();
