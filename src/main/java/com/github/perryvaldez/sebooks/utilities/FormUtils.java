@@ -52,10 +52,10 @@ public final class FormUtils {
 		String methodName = pd.getReadMethod().getName();
 		NameValuePair pair = null;
 		
-		try {
-			String value = "" + pd.getReadMethod().invoke(form);
+		try {		
+			String value = toJSON(pd.getReadMethod().invoke(form));		
             String propName = derivePropertyName(methodName);
-		
+
 			pair = new NameValuePair();
 			pair.setName(propName);
 			pair.setValue(value);
@@ -98,36 +98,52 @@ public final class FormUtils {
 		
 		return decodedString;
 	}
-	
-	private static String serializeMap(Map<String, String> map) {
+
+	private static String toJSON(Object obj) {
 		var mapper = new ObjectMapper();
 		String value = "";
 		
 		try {
-			value = toBase64(mapper.writeValueAsString(map));
+			value = mapper.writeValueAsString(obj);
 		} catch (JsonProcessingException ex) {
-			throw new SerializeOperationException("An error occurred while serializing map: ", ex);
+			throw new SerializeOperationException("An error occurred while converting to JSON: ", ex);
 		}
 		
-		return value;
+		return value;		
 	}
 	
-	private static Map<String, String> deserializeMap(String serialized) {
+	private static String serializeMap(Map<String, String> map) {
+		String json = toJSON(map);
+		LOGGER.info("==== serialized: " + json);
+		return toBase64(json);
+	}
+	
+	private static <T> T fromJSON(String json) {
 		var mapper = new ObjectMapper();
-		var typeRef = new TypeReference<Map<String, String>>() {};
-		Map<String, String> map = new HashMap<String, String>();
+		var typeRef = new TypeReference<T>() {};
+		T ret = null;
 		
 		try {
-			map = mapper.readValue(fromBase64(serialized), typeRef);
+			ret = mapper.readValue(fromBase64(json), typeRef);
 		} catch (JsonParseException ex) {
-			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+			throw new DeserializeOperationException("An error occurred while parsing JSON: ", ex);
 		} catch (JsonMappingException ex) {
-			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+			throw new DeserializeOperationException("An error occurred while parsing JSON: ", ex);
 		} catch (IOException ex) {
-			throw new DeserializeOperationException("An error occurred while serializing map: ", ex);
+			throw new DeserializeOperationException("An error occurred while parsing JSON: ", ex);
 		}
 		
-		return map;
+		return ret;
+	}
+	
+	private static Map<String, String> deserializeMap(String serialized) {	
+		Map<String, String> ret = fromJSON(serialized);
+		
+		if(ret == null) {
+		  ret = new HashMap<String, String>();	
+		}
+		
+		return ret;
 	}
 	
 	public static void saveFormOrigValues(FormPersistable form) {

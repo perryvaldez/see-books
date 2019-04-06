@@ -27,6 +27,7 @@ import com.github.perryvaldez.seebooks.datalayer.UnitOfWorkManager;
 import com.github.perryvaldez.seebooks.datalayer.WorkSession;
 import com.github.perryvaldez.seebooks.forms.UserForm;
 import com.github.perryvaldez.seebooks.forms.UserFormValidator;
+import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.UserWithRoles;
@@ -71,11 +72,16 @@ public class AdminController {
 		KeyType key = this.keyUtil.makeKey(id);
 		
 		User user = this.userService.getUserById(key);
+		List<Role> roles = this.userService.getUserRoles(user);
 		
 		userForm.setId(id);
 		userForm.setEmail(user.getEmail());
 		userForm.setPassword("");
 		userForm.setConfirmPassword("");
+		
+		roles.stream().forEach(role -> {				
+			userForm.getRoleIds().add(role.getId().serialize());
+		}); 
 
 		FormUtils.saveFormOrigValues(userForm);
 		

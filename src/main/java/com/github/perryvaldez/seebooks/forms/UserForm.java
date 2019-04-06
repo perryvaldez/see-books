@@ -1,5 +1,8 @@
 package com.github.perryvaldez.seebooks.forms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +18,8 @@ public class UserForm implements FormPersistable {
     private String confirmPassword;
     
     private String serializedOrigValues;
+    
+    private List<String> roleIds = new ArrayList<String>();
     
 	public String getId() {
 		return id;
@@ -56,5 +61,9 @@ public class UserForm implements FormPersistable {
 	@Override
 	public void setSerializedOrigValues(String serializedOrigValues) {
 		this.serializedOrigValues = serializedOrigValues;
+	}
+
+	public List<String> getRoleIds() {
+		return this.roleIds;
 	}
 }
