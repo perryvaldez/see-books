@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.github.perryvaldez.seebooks.models.User;
@@ -81,6 +82,7 @@ public class HibUser implements User {
         joinColumns = {@JoinColumn(name = "user_id")}, 
         inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
+    @OrderBy("name ASC")
 	private Set<HibRole> roles = new HashSet<>();
     
     public Set<HibRole> getRoles() {
