@@ -1,7 +1,9 @@
 package com.github.perryvaldez.seebooks.forms;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -20,6 +22,8 @@ public class UserForm implements FormPersistable {
     private String serializedOrigValues;
     
     private List<String> roleIds = new ArrayList<String>();
+    
+    private Map<String, String> roleLookup = new HashMap<String, String>();
     
 	public String getId() {
 		return id;
@@ -66,4 +70,9 @@ public class UserForm implements FormPersistable {
 	public List<String> getRoleIds() {
 		return this.roleIds;
 	}
+
+	public Map<String, String> getRoleLookup() {
+		return roleLookup;
+	}
+
 }
