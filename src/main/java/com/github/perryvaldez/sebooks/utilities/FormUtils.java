@@ -123,7 +123,7 @@ public final class FormUtils {
 		T ret = null;
 		
 		try {
-			ret = mapper.readValue(fromBase64(json), typeRef);
+			ret = mapper.readValue(json, typeRef);
 		} catch (JsonParseException ex) {
 			throw new DeserializeOperationException("An error occurred while parsing JSON: ", ex);
 		} catch (JsonMappingException ex) {
@@ -135,8 +135,10 @@ public final class FormUtils {
 		return ret;
 	}
 	
-	private static Map<String, String> deserializeMap(String serialized) {	
-		Map<String, String> ret = fromJSON(serialized);
+	private static Map<String, String> deserializeMap(String serialized) {
+		String json = fromBase64(serialized);
+		LOGGER.info("==== to be deserialized: " + json);
+		Map<String, String> ret = fromJSON(json);
 		
 		if(ret == null) {
 		  ret = new HashMap<String, String>();	
@@ -166,6 +168,19 @@ public final class FormUtils {
 		}); 
 		
 		return dirtyProps;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getOriginalValue(FormPersistable form, String propertyName) {
+		Map<String, String> propMap = deserializeMap(form.getSerializedOrigValues());
+		String json = propMap.get(propertyName);
+		
+		T value = null;
+		if (json != null) {
+			value = (T) fromJSON(json);
+		}
+		
+		return value;
 	}
 }
 
