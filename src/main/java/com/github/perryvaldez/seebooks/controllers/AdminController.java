@@ -81,6 +81,7 @@ public class AdminController {
 		
 		roles.stream().forEach(role -> {				
 			userForm.getRoleIds().add(role.getId().serialize());
+			userForm.getRoleLookup().put(role.getId().serialize(), role.getName());
 		}); 
 
 		FormUtils.saveFormOrigValues(userForm);
@@ -105,9 +106,9 @@ public class AdminController {
 			model.addAttribute("fieldErrors", fieldErrors);
 			
 			return new ModelAndView("views/admin/users/byid_edit", "userForm", userForm);
-		} else {		
+		} else {				
 			List<String> dirtyProps = FormUtils.getDirtyProperties(userForm).stream()
-					.filter((p -> p == "email" || p == "password"))
+					.filter((p -> p == "email" || p == "password" || p == "roleIds"))
 					.collect(Collectors.toList())
 					;
 			
@@ -123,7 +124,13 @@ public class AdminController {
 					if(dirtyProps.contains("password")) {
 						user.setPassword(this.passwordEncoder.encode(userForm.getPassword()));	
 					}
-					
+
+					if(dirtyProps.contains("roleIds")) {
+						LOGGER.info("==== role IDs is dirty.");
+						userForm.getRoleIds().stream().forEach(id -> {
+							LOGGER.info("==== role ID selected: " + id);
+						}); 
+					}
 					
 					this.userService.updateUser(workSession, user);
 					workSession.commit();
