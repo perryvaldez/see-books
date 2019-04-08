@@ -138,4 +138,16 @@ public class DbNumUserService implements UserService {
         
         ws.getSession().merge((HibUser) user);
 	}
+
+	@Override
+	public void addRolesToUser(WorkSession workSession, User user, List<KeyType> roleIds) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeRolesFromUser(WorkSession workSession, User user, List<KeyType> roleIds) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -17,4 +17,6 @@ public interface UserService {
     public List<Role> getUserRoles(User user);
     public List<Privilege> getUserPrivileges(User user);
     public void updateUser(WorkSession workSession, User user);
+    public void addRolesToUser(WorkSession workSession, User user, List<KeyType> roleIds);
+    public void removeRolesFromUser(WorkSession workSession, User user, List<KeyType> roleIds);
 }

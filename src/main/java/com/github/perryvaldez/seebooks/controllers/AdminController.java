@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.perryvaldez.sebooks.utilities.FormUtils;
+import com.github.perryvaldez.sebooks.utilities.Utils;
 import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
 import com.github.perryvaldez.seebooks.datalayer.UnitOfWorkManager;
 import com.github.perryvaldez.seebooks.datalayer.WorkSession;
@@ -126,10 +127,16 @@ public class AdminController {
 					}
 
 					if(dirtyProps.contains("roleIds")) {
-						LOGGER.info("==== role IDs is dirty.");
-						userForm.getRoleIds().stream().forEach(id -> {
-							LOGGER.info("==== role ID selected: " + id);
-						}); 
+						List<String> origRoleIds = FormUtils.getOriginalValue(userForm, "roleIds");
+ 
+						List<String> deletedIds = Utils.listDifference(origRoleIds, userForm.getRoleIds());
+						List<String> insertedIds = Utils.listDifference(userForm.getRoleIds(), origRoleIds);
+						
+						List<KeyType> deletedRoleKeys = deletedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
+						List<KeyType> insertedRoleKeys = insertedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
+						
+						this.userService.addRolesToUser(workSession, user, insertedRoleKeys);
+						this.userService.removeRolesFromUser(workSession, user, deletedRoleKeys);
 					}
 					
 					this.userService.updateUser(workSession, user);
