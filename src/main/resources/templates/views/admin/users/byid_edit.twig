@@ -33,7 +33,7 @@
   <div class="form-row">
     <p>Roles</p>
     {%- for item in userForm.roleIds -%}
-      <div><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked=checked"" /> {{ userForm.roleLookup[item] }}</div>
+      <div><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" /> {{ userForm.roleLookup[item] }}</div>
     {%- endfor -%}
   </div>
     
