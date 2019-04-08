@@ -24,6 +24,7 @@ import com.github.perryvaldez.seebooks.exceptions.DeserializeOperationException;
 import com.github.perryvaldez.seebooks.exceptions.InvokeReadMethodException;
 import com.github.perryvaldez.seebooks.exceptions.SerializeOperationException;
 import com.github.perryvaldez.seebooks.forms.FormPersistable;
+import com.github.perryvaldez.seebooks.models.types.KeyValuePair;
 
 public final class FormUtils {
 	@SuppressWarnings("unused")
@@ -48,18 +49,16 @@ public final class FormUtils {
 		return propName;
 	}
 	
-	private static NameValuePair getPropertyNameAndValue(FormPersistable form, PropertyDescriptor pd) {
+	private static KeyValuePair<String, String> getPropertyNameAndValue(FormPersistable form, PropertyDescriptor pd) {
 		String methodName = pd.getReadMethod().getName();
-		NameValuePair pair = null;
+		KeyValuePair<String, String> pair = null;
 		
 		try {		
 			String value = toJSON(pd.getReadMethod().invoke(form));		
             String propName = derivePropertyName(methodName);
 
-			pair = new NameValuePair();
-			pair.setName(propName);
-			pair.setValue(value);
-		
+			pair = new KeyValuePair<String, String>(propName, value);
+			
 		} catch (InvocationTargetException ex) {
 			throw new InvokeReadMethodException("An error occurred while saving form field values", ex);
 		} catch (IllegalAccessException ex) {
@@ -74,10 +73,10 @@ public final class FormUtils {
 		Map<String, String> propMap = new HashMap<String, String>();
 		
 		Arrays.stream(pdList).filter(pd -> isRegularMethodName(pd.getReadMethod().getName())).forEach(pd -> {
-            NameValuePair pair = getPropertyNameAndValue(form, pd);
+			KeyValuePair<String, String> pair = getPropertyNameAndValue(form, pd);
 
             if (pair != null) {
-            	propMap.put(pair.getName(), pair.getValue());	
+            	propMap.put(pair.getKey(), pair.getValue());	
             }
 		});
 		
@@ -170,24 +169,3 @@ public final class FormUtils {
 	}
 }
 
-class NameValuePair {
-	private String name;
-	private String value;
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getValue() {
-		return value;
-	}
-	
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-}
