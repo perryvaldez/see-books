@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaRoleRepository;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 import com.github.perryvaldez.seebooks.services.UserService;
 import com.github.perryvaldez.seebooks.services.impl.DbNumUserService;
@@ -17,11 +18,14 @@ public class ServiceConfig {
 	private JpaUserRepository userRepository;
 	
 	@Autowired
+	private JpaRoleRepository roleRepository;
+	
+	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 	
 	@Bean
 	public UserService userService() {
 		SessionFactory sessionFactory = this.entityManagerFactory.unwrap(SessionFactory.class);
-		return new DbNumUserService(this.userRepository, sessionFactory);
+		return new DbNumUserService(this.userRepository, this.roleRepository, sessionFactory);
 	}
 }
