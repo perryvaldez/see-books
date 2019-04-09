@@ -132,11 +132,15 @@ public class AdminController {
 						List<String> deletedIds = Utils.listDifference(origRoleIds, userForm.getRoleIds());
 						List<String> insertedIds = Utils.listDifference(userForm.getRoleIds(), origRoleIds);
 						
-						List<KeyType> deletedRoleKeys = deletedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
-						List<KeyType> insertedRoleKeys = insertedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
+						if(deletedIds.size() > 0) {
+							List<KeyType> deletedRoleKeys = deletedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());	
+							this.userService.removeRolesFromUser(workSession, user, deletedRoleKeys);
+						}
 						
-						this.userService.addRolesToUser(workSession, user, insertedRoleKeys);
-						this.userService.removeRolesFromUser(workSession, user, deletedRoleKeys);
+						if(insertedIds.size() > 0) {
+							List<KeyType> insertedRoleKeys = insertedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
+							this.userService.addRolesToUser(workSession, user, insertedRoleKeys);	
+						}
 					}
 					
 					this.userService.updateUser(workSession, user);
