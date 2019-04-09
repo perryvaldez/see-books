@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.github.perryvaldez.sebooks.utilities.Utils;
 import com.github.perryvaldez.seebooks.datalayer.WorkSession;
 import com.github.perryvaldez.seebooks.datalayer.impl.HibWorkSession;
+import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaRoleRepository;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
 import com.github.perryvaldez.seebooks.models.Privilege;
 import com.github.perryvaldez.seebooks.models.Role;
@@ -31,12 +32,14 @@ public class DbNumUserService implements UserService {
 	private static final Logger LOGGER = LogManager.getLogger(DbNumUserService.class);
 	
 	private JpaUserRepository userRepository;
+	private JpaRoleRepository roleRepository;
     private SessionFactory sessionFactory;
 	
 	public DbNumUserService() {}
 	
-	public DbNumUserService(JpaUserRepository userRepository, SessionFactory sessionFactory) {
+	public DbNumUserService(JpaUserRepository userRepository, JpaRoleRepository roleRepository, SessionFactory sessionFactory) {
 	    this.userRepository = userRepository;
+	    this.roleRepository = roleRepository;
 	    this.sessionFactory = sessionFactory;
 	}
 
@@ -147,7 +150,13 @@ public class DbNumUserService implements UserService {
 
 	@Override
 	public void removeRolesFromUser(WorkSession workSession, User user, List<KeyType> roleIds) {
-		// TODO Auto-generated method stub
+		Session session = ((HibWorkSession) workSession).getSession();
 		
+		roleIds.stream().forEach(id -> {
+			NumericKeyType numKeyId = (NumericKeyType) id;
+			HibRole role = this.roleRepository.findById(numKeyId.getValue());
+						
+		    session.remove(role);		    
+		});
 	}
 }
