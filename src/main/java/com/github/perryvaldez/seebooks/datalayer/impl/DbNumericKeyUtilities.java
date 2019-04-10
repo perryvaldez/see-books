@@ -1,6 +1,8 @@
 package com.github.perryvaldez.seebooks.datalayer.impl;
 
 import java.math.BigInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,5 +44,10 @@ public class DbNumericKeyUtilities implements KeyUtilities {
 		}
 		
 		return ret;
+	}
+
+	@Override
+	public List<KeyType> makeListOfKeys(List<?> keyList) {
+		return keyList.stream().map(id -> this.makeKey(id)).collect(Collectors.toList()); 
 	}
 }

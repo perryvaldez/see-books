@@ -136,12 +136,12 @@ public class AdminController {
 						List<String> insertedIds = Utils.listDifference(currentRoleIds, origRoleIds);
 						
 						if(deletedIds.size() > 0) {
-							List<KeyType> deletedRoleKeys = deletedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());	
+							List<KeyType> deletedRoleKeys = this.keyUtil.makeListOfKeys(deletedIds);	
 							this.userService.removeRolesFromUser(workSession, user, deletedRoleKeys);
 						}
 						
 						if(insertedIds.size() > 0) {
-							List<KeyType> insertedRoleKeys = insertedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());
+							List<KeyType> insertedRoleKeys = this.keyUtil.makeListOfKeys(insertedIds);
 							this.userService.addRolesToUser(workSession, user, insertedRoleKeys);	
 						}
 					}
