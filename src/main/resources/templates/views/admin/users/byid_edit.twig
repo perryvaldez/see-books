@@ -48,9 +48,10 @@
   {%- endif -%} 
     
   <div class="form-row button-row">
-    <input type="button" id="btn-add-roles" value="Add roles..." />
+    <input type="button" id="btn-add-roles" value="Add roles..." v-on:click="launchAddRole" />
     <input type="submit" value="Save changes" />
-  </div>  
+  </div>
+  <div>$[ message ]</div>  
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
 </form>
@@ -59,3 +60,20 @@
 
 <p><a href="{{ path('/admin/users') }}">Back</a> <a href="{{ path('/') }}">Home</a></p>
 {%- endblock -%}
+
+{%- block postcontent -%}
+<script>
+seebooks.createVue({
+    el: '#form-user',
+    data: { message: '' },
+    methods: {
+      launchAddRole: function (evt) {
+          alert('Test only!');
+          this.message = 'Test only from Vue';
+      }
+    },
+  });
+</script>
+{%- endblock -%}
+
+
