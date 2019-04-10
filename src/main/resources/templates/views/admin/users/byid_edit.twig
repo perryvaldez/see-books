@@ -64,25 +64,6 @@
 
 {%- block postcontent -%}
 <script>
-seebooks.createVueComponent('test-component', {
-  data: function () {
-    return {
-      message: '',
-    };
-  },
-  template: '<span><label>$[ message ]</label><input type="button" value="Test Click" v-on:click="message=\'Hi, there!\'" /></span>',
-});
-
-seebooks.createVue({
-    el: '#form-user',
-    data: {
-        message: '',
-    },
-    methods: {
-      launchAddRole: function (evt) {
-          this.message = 'Test only from Vue as component';
-      }
-    },
-  });
+seebooks.adminUsers.run('#form-user');
 </script>
 {%- endblock -%}

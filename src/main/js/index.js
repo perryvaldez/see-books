@@ -1,13 +1,7 @@
-import Vue from 'vue';
+import common from './common';
+import adminUsersModule from './admin/users';
 
-export const createVue = (opts = {}) => {
-  opts.delimiters = ['$[', ']'];
+export const createVue = (opts = {}) => common.createVue(opts);
+export const createVueComponent = (name, opts = {}) => common.createVueComponent(name, opts);
 
-  return new Vue(opts);
-};
-
-export const createVueComponent = (name, opts = {}) => {
-  opts.delimiters = ['$[', ']'];
-  
-  return Vue.component(name, opts);
-};
+export const adminUsers = adminUsersModule;
