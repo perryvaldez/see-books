@@ -52,6 +52,7 @@
     <input type="submit" value="Save changes" />
   </div>
   <div>$[ message ]</div>  
+  <div><test-component /></div>
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
 </form>
@@ -63,17 +64,25 @@
 
 {%- block postcontent -%}
 <script>
+seebooks.createVueComponent('test-component', {
+  data: function () {
+    return {
+      message: '',
+    };
+  },
+  template: '<span><label>$[ message ]</label><input type="button" value="Test Click" v-on:click="message=\'Hi, there!\'" /></span>',
+});
+
 seebooks.createVue({
     el: '#form-user',
-    data: { message: '' },
+    data: {
+        message: '',
+    },
     methods: {
       launchAddRole: function (evt) {
-          alert('Test only!');
-          this.message = 'Test only from Vue';
+          this.message = 'Test only from Vue as component';
       }
     },
   });
 </script>
 {%- endblock -%}
-
-
