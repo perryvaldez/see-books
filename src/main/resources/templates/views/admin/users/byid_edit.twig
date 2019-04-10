@@ -30,8 +30,8 @@
     <input type="password" id="confirm-password" name="confirmPassword" value="{{ userForm.confirmPassword }}" maxlength="20" />
   </div>
   
-  <div class="form-row">
-    <p>Roles</p>
+  <div class="form-row roles-row">
+    <p>Roles:</p>
     {%- for item in userForm.roleIds -%}
       <div><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" /> {{ userForm.roleLookup[item] }}</div>
     {%- endfor -%}
@@ -48,6 +48,7 @@
   {%- endif -%} 
     
   <div class="form-row button-row">
+    <input type="button" id="btn-add-roles" value="Add roles..." />
     <input type="submit" value="Save changes" />
   </div>  
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />

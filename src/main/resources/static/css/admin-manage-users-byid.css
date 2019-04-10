@@ -19,6 +19,10 @@
   margin-top: 20px;
 }
 
+#form-user .roles-row {
+  margin-top: 20px;
+}
+
 #form-user #email {
   width: 380px;
 }
