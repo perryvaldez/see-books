@@ -128,9 +128,12 @@ public class AdminController {
 
 					if(dirtyProps.contains("roleIds")) {
 						List<String> origRoleIds = FormUtils.getOriginalValue(userForm, "roleIds");
- 
-						List<String> deletedIds = Utils.listDifference(origRoleIds, userForm.getRoleIds());
-						List<String> insertedIds = Utils.listDifference(userForm.getRoleIds(), origRoleIds);
+						origRoleIds = origRoleIds.stream().filter(id -> id != null).collect(Collectors.toList());
+						
+                        List<String> currentRoleIds = userForm.getRoleIds().stream().filter(id -> id != null).collect(Collectors.toList());                        
+						
+						List<String> deletedIds = Utils.listDifference(origRoleIds, currentRoleIds);
+						List<String> insertedIds = Utils.listDifference(currentRoleIds, origRoleIds);
 						
 						if(deletedIds.size() > 0) {
 							List<KeyType> deletedRoleKeys = deletedIds.stream().map(id -> this.keyUtil.makeKey(id)).collect(Collectors.toList());	

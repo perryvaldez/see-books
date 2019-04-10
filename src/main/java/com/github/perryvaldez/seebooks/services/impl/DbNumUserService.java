@@ -155,8 +155,10 @@ public class DbNumUserService implements UserService {
 		roleIds.stream().forEach(id -> {
 			NumericKeyType numKeyId = (NumericKeyType) id;
 			HibRole role = this.roleRepository.findById(numKeyId.getValue());
-						
-		    session.remove(role);		    
+			
+			HibUser huser = (HibUser) user;
+			huser.getRoles().remove(role);
+			session.merge(huser);
 		});
 	}
 }
