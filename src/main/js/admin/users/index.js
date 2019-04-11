@@ -1,23 +1,24 @@
-import common from '../../common';
+import Vue from 'vue';
 
 const run = (element) => {
-	common.createVueComponent('test-component', {
+	Vue.component('test-component', {
 	  data: () => ({
 	      message: '',
 	    }),
-	  template: '<span>$[ message ]<input type="button" value="Test Click" v-on:click="message=\'Hi, there! From component.\'" /></span>',
+	  template: '<span>{{ message }}<input type="button" value="Test Click" v-on:click="message=\'Hi, there!.\'" /></span>',
 	});
 
-	const v = common.createVue({
+	const v = new Vue({
 	  el: element,
 	  data: {
 	      message: '',
 	  },
 	  methods: {
 	    launchAddRole: (evt) => {
-	        v.message = 'Test only from Vue as component';
+	        v.message = 'Test Vue component';
 	    }
 	  },
+	  delimiters: ['$[', ']'],
 	});	
 };
 
