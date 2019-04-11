@@ -1,15 +1,10 @@
 import Vue from 'vue';
+import TestComponent from './test-component.vue';
 
 const run = (element) => {
-	Vue.component('test-component', {
-	  data: () => ({
-	      message: '',
-	    }),
-	  template: '<span>{{ message }}<input type="button" value="Test Click" v-on:click="message=\'Hi, there!.\'" /></span>',
-	});
-
 	const v = new Vue({
 	  el: element,
+	  components: { TestComponent },
 	  data: {
 	      message: '',
 	  },
