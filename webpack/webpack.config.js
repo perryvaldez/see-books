@@ -24,6 +24,7 @@ const path = require('path');
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -69,7 +70,12 @@ module.exports = {
   },
   
   plugins: [
-    new VueLoaderPlugin()   
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+    	filename: '../../templates/layouts/base.twig',
+    	template: './src/main/js/index.tpl.ejs',
+    	inject: false,
+    }),
   ],
   
   resolve: {
@@ -80,7 +86,7 @@ module.exports = {
   
   output: {
     chunkFilename: '[name].[chunkhash].js',
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, '../src/main/resources/static/js'),
     library: 'seebooks',
   },
