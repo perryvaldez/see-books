@@ -35,4 +35,5 @@ HELP.md
 node/**
 .yo-rc.json
 src/main/resources/static/js/main.**
+src/main/resources/templates/layouts/base.twig
 
