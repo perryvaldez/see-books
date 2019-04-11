@@ -72,8 +72,8 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-    	filename: '../../templates/layouts/base.twig',
-    	template: './src/main/js/index.tpl.ejs',
+    	filename: path.resolve(__dirname, '../src/main/resources/templates/layouts/base.twig'),
+    	template: path.resolve(__dirname, '../src/main/js/index.tpl.ejs'),
     	inject: false,
     }),
   ],
