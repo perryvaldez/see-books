@@ -1,14 +1,19 @@
 <template>
-  <span>{{someString}}: {{ message }}<input type="button" value="Test Click" v-on:click="message='Hi, again!.'; theString='From test component'" /></span>
+  <span>
+    {{someString}}: {{ message }}
+    <input type="button" value="Test Click" @click="message='Hi, again!.'; theString='From test component'" />
+  </span>
 </template>
 
 <script>
-export default {
+const component = {
   data: () => ({
     message: '',
   }),
   props: {
     someString: String,
-  },
-}
+  },		
+};
+
+export default component;
 </script>

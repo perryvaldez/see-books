@@ -16,7 +16,11 @@ const run = (element) => {
 	        v.message = 'Test Vue component';
 	        v.theString = 'From launchAddRole';
 	        v.showDialog = true;
-	    }
+	    },
+	    
+	    handleRequestClose: (e) => {
+	    	v.showDialog = false;
+	    },
 	  },
 	  delimiters: ['$[', ']'],
 	});	

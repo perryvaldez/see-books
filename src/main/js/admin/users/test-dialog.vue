@@ -4,7 +4,7 @@
       <p>This is a test dialog.</p>
       
       <md-dialog-actions>
-        <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+        <md-button class="md-primary" @click="$emit('on-request-close', $event)">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
 </template>
@@ -17,19 +17,19 @@ import 'vue-material/dist/vue-material.min.css';
 Vue.use(MdDialog);
 Vue.use(MdButton);
 
-export default {
+const component = {
   name: 'TestDialog',
-  data: function () {
-    return {};
-  },
+  data: () => ({}),
   props: {
     open: Boolean,
   },
-}
+};
+
+export default component;
 </script>
 
 <style lang="scss" scoped>
-.md-dialog {
+md-dialog {
   max-width: 768px;
 }
 </style>

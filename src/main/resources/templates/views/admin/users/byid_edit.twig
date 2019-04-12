@@ -55,7 +55,7 @@
   <div><test-component :some-string="theString" /></div>
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
-  <div><test-dialog :open="showDialog" /></div>
+  <div><test-dialog :open="showDialog" @on-request-close="handleRequestClose" /></div>
 </form>
 
 {% endautoescape %}
