@@ -1,25 +1,24 @@
 import Vue from 'vue';
-import TestComponent from './test-component.vue';
-import TestDialog from './test-dialog.vue';
+import RoleDialog from './components/role-dialog.vue';
 
 const run = (element) => {
 	const v = new Vue({
 	  el: element,
-	  components: { TestComponent, TestDialog },
+	  components: { RoleDialog },
 	  data: {
-	      message: '',
-	      theString: 'Init from root app',
-	      showDialog: false,
+	      showRoleDialog: false,
 	  },
 	  methods: {
 	    launchAddRole: (evt) => {
-	        v.message = 'Test Vue component';
-	        v.theString = 'From launchAddRole';
-	        v.showDialog = true;
+	        v.showRoleDialog = true;
 	    },
 	    
 	    handleRequestClose: (e) => {
-	    	v.showDialog = false;
+	    	v.showRoleDialog = false;
+	    },
+	    
+	    handleSave: (e) => {
+	    	console.log('handleSave() triggered...');
 	    },
 	  },
 	  delimiters: ['$[', ']'],

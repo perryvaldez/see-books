@@ -48,14 +48,12 @@
   {%- endif -%} 
     
   <div class="form-row button-row">
-    <input type="button" id="btn-add-roles" value="Add roles..." v-on:click="launchAddRole" />
+    <input type="button" id="btn-add-roles" value="Add roles..." @click="launchAddRole" />
     <input type="submit" value="Save changes" />
   </div>
-  <div>$[ message ]</div>  
-  <div><test-component :some-string="theString" /></div>
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
-  <div><test-dialog :open="showDialog" @on-request-close="handleRequestClose" /></div>
+  <role-dialog :open="showRoleDialog" @on-request-close="handleRequestClose" @on-save="handleSave" />
 </form>
 
 {% endautoescape %}
