@@ -1,5 +1,5 @@
 <template>
-    <md-dialog :md-active.sync="showDialog">
+    <md-dialog :md-active.sync="open">
       <md-dialog-title>Test Dialog</md-dialog-title>
       <p>This is a test dialog.</p>
       
@@ -19,10 +19,12 @@ Vue.use(MdButton);
 
 export default {
   name: 'TestDialog',
-  data: () => ({
-    showDialog: false,
-  }),
-  // components: { MdDialog, MdDialogTitle, MdDialogActions, MdButton },
+  data: function () {
+    return {};
+  },
+  props: {
+    open: Boolean,
+  },
 }
 </script>
 

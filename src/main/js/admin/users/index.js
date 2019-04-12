@@ -8,10 +8,14 @@ const run = (element) => {
 	  components: { TestComponent, TestDialog },
 	  data: {
 	      message: '',
+	      theString: 'Init from root app',
+	      showDialog: false,
 	  },
 	  methods: {
 	    launchAddRole: (evt) => {
-	        v.message = 'Test Vue component';	        
+	        v.message = 'Test Vue component';
+	        v.theString = 'From launchAddRole';
+	        v.showDialog = true;
 	    }
 	  },
 	  delimiters: ['$[', ']'],
