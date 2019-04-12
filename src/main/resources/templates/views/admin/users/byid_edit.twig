@@ -11,7 +11,7 @@
 
 {% autoescape 'html' %}
 
-<form id="form-user" method="post" action="{{ path(concat('/admin/users/', userForm.id, '/edit')) }}">
+<form id="form-user" name="form-user" method="post" action="{{ path(concat('/admin/users/', userForm.id, '/edit')) }}">
   <div class="form-row">
     <label for="id">ID</label>
     <span>{{ userForm.id }}</span>
@@ -33,7 +33,9 @@
   <div class="form-row roles-row">
     <p>Roles:</p>
     {%- for item in userForm.roleIds -%}
-      <div><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" /> {{ userForm.roleLookup[item] }}</div>
+      <div>
+        <label class="role-label"><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" v-model="selectedRoles" /> {{ userForm.roleLookup[item] }}</label>
+      </div>
     {%- endfor -%}
   </div>
     
