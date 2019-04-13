@@ -44,7 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     				       .antMatchers("/h2-console/*").permitAll()
     				       ;
     	} else {
-    		httpInit = http.authorizeRequests();
+    		httpInit = http.csrf().ignoringAntMatchers("/api/**")
+    				       .and()
+    				       .authorizeRequests()
+    				       ;
     	}
 
 	    httpInit
