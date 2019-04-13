@@ -16,6 +16,7 @@ import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
 import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
+import com.github.perryvaldez.seebooks.models.types.KeyValuePair;
 import com.github.perryvaldez.seebooks.services.UserService;
 
 @Controller
@@ -33,17 +34,16 @@ public class ApiController {
 	
 	@GetMapping("/api/users/{id}/roles")
 	@ResponseBody
-	public List<Map<String, String>> getUserRoles(@PathVariable String id) {
-		List<Map<String, String>> roles = new ArrayList<Map<String, String>>();
+	public List<KeyValuePair<String, String>> getUserRoles(@PathVariable String id) {
+		List<KeyValuePair<String, String>> roles = new ArrayList<KeyValuePair<String, String>>();
 		
 		KeyType userId = this.keyUtil.makeKey(id);
 		User user = this.userService.getUserById(userId);
 		List<Role> roleList = this.userService.getUserRoles(user);
 		
 		roleList.stream().forEach(role -> {
-			Map<String, String> entry = new HashMap<String, String>();
-			entry.put(role.getId().serialize(), role.getName());
-			roles.add(entry);
+			KeyValuePair<String, String> pair = new KeyValuePair<String, String>(role.getId().serialize(), role.getName());
+			roles.add(pair);
 		});
 		
 		return roles;
