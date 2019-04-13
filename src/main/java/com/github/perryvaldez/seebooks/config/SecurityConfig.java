@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    httpInit
 	            .antMatchers("/", "/css/*", "/js/*", "/images/*", "/loggedout").permitAll()
+	            .antMatchers("/api/**").permitAll()  // TODO: DEBUG
 	            .antMatchers("/admin/users/**").access("@securityService.matchPrivilege(authentication, { '*', 'can_manage', 'user', '*' })")
 	            .antMatchers("/admin/businesses/**").access("@securityService.matchPrivilege(authentication, { '*', 'can_manage', 'business', '*' })")
 	            .anyRequest().authenticated()
