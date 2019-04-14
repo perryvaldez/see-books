@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import axios from 'axios';
+import path from 'path';
+import appconfig from '../../appconfig';
 import RoleDialog from './components/role-dialog.vue';
 
 const run = (element) => {
@@ -30,6 +33,16 @@ const run = (element) => {
 	        Vue.set(this.selectedRoles, index, el[i].value);
 	        index += 1;
 	      }
+	    }
+	  },
+	  mounted: async function () {
+	    const userId = document.forms['form-user'].id.value;
+	    try {
+	      const apiUrl = path(appconfig.API_BASE_URL, 'users', userId, 'roles');
+	      const result = await axios.get(apiUrl);
+	      console.log('axios: get apiUrl: ', result);
+	    } catch (ex) {
+	      console.error('Error while retrieving user roles: ', ex);
 	    }
 	  },
 	  delimiters: ['$[', ']'],
