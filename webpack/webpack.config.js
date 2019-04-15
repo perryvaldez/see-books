@@ -43,7 +43,10 @@ module.exports = {
         	    !/\.vue\.js/.test(file)
         	  ),
         options: {
-          plugins: ['syntax-dynamic-import'],
+          plugins: [
+            '@babel/plugin-syntax-dynamic-import',
+            '@babel/plugin-transform-runtime',
+          ],
           presets: [
             [
               '@babel/preset-env',
