@@ -21,6 +21,10 @@ const run = (element) => {
 	    	v.showRoleDialog = false;
 	    },
 	    
+	    getCheckedRoles: function () {
+	    	return this.selectedRoles.filter(item => item.checked).map(item => item.key);
+	    },
+	    
 	    handleSave: (e) => {
 	    	console.log('handleSave() triggered...', v.selectedRoles);
 	    },

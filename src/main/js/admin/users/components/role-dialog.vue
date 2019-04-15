@@ -27,6 +27,10 @@ const component = {
   data: () => ({}),
   props: {
     open: Boolean,
+    selectedRoleIds: Array,
+  },
+  updated: function () {
+	console.log('role-dialog: updated: selectedRoleIds: ', this.selectedRoleIds);
   },
 };
 
