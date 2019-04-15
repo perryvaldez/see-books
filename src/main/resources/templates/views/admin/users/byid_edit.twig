@@ -12,7 +12,7 @@
 {% autoescape 'html' %}
 
 <form id="form-user" name="form-user" method="post" action="{{ path(concat('/admin/users/', userForm.id, '/edit')) }}">
-  <div class="form-row">
+   <div class="form-row">
     <label for="id">ID</label>
     <span>{{ userForm.id }}</span>
     <input type="hidden" id="id" name="id" value="{{ userForm.id }}" />
@@ -34,7 +34,7 @@
     <p>Roles:</p>
     {%- for item in userForm.roleIds -%}
       <div>
-        <label class="role-label"><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" v-model="selectedRoles" /> {{ userForm.roleLookup[item] }}</label>
+        <label class="role-label"><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" data-v-model="selectedRoles" /> {{ userForm.roleLookup[item] }}</label>
       </div>
     {%- endfor -%}
   </div>
@@ -54,13 +54,14 @@
     <input type="submit" value="Save changes" />
   </div>
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
-  <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" />
-  <role-dialog :open="showRoleDialog" @on-request-close="handleRequestClose" @on-save="handleSave" />
+  <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" /> 
+  <!-- role-dialog :open="showRoleDialog" @on-request-close="handleRequestClose" @on-save="handleSave" / --> 
 </form>
 
 {% endautoescape %}
 
 <p><a href="{{ path('/admin/users') }}">Back</a> <a href="{{ path('/') }}">Home</a></p>
+
 {%- endblock -%}
 
 {%- block postcontent -%}

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
-import path from 'path';
+import urlJoin from 'url-join';
 import appconfig from '../../appconfig';
 import RoleDialog from './components/role-dialog.vue';
 
@@ -25,22 +25,16 @@ const run = (element) => {
 	    	console.log('handleSave() triggered...', v.selectedRoles);
 	    },
 	  },
-	  created: function () {
-        const el = document.forms['form-user'].elements;
-        let index = 0;
-	    for (let i = 0; i < el.length; i += 1) {
-	      if (el[i].name.startsWith('roleIds[')) {
-	        Vue.set(this.selectedRoles, index, el[i].value);
-	        index += 1;
-	      }
-	    }
-	  },
 	  mounted: async function () {
 	    const userId = document.forms['form-user'].id.value;
 	    try {
-	      const apiUrl = path(appconfig.API_BASE_URL, 'users', userId, 'roles');
-	      const result = await axios.get(apiUrl);
-	      console.log('axios: get apiUrl: ', result);
+	      const apiUrl = urlJoin(appconfig.API_BASE_URL, 'users', userId, 'roles');
+	      const result = await axios.get(apiUrl);	      
+	      console.log('axios: get apiUrl: ', result.data);
+	      console.log('axios: selectedRoles: ', v.selectedRoles);
+	      for (let i = 0; i < result.data.length; i++) {
+	        Vue.set(this.selectedRoles, i, result.data[i]);
+	      }
 	    } catch (ex) {
 	      console.error('Error while retrieving user roles: ', ex);
 	    }
