@@ -31,12 +31,10 @@
   </div>
   
   <div class="form-row roles-row">
-    <p>Roles:</p>
-    {%- for item in userForm.roleIds -%}
-      <div>
-        <label class="role-label"><input type="checkbox" name="roleIds[{{ loop.index0 }}]" value="{{ item }}" checked="checked" data-v-model="selectedRoles" /> {{ userForm.roleLookup[item] }}</label>
-      </div>
-    {%- endfor -%}
+    <p>Roles:</p>   
+    <div v-for="(role, index) in selectedRoles" :key="role.key">
+        <label class="role-label"><input type="checkbox" :name="`roleIds[${index}]`" :value="role.key" v-model="selectedRoles[index].checked" /> $[ role.value ]</label>
+    </div>    
   </div>
     
   {%- if (length(globalErrors) > 0) -%} 

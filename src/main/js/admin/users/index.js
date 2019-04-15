@@ -30,10 +30,9 @@ const run = (element) => {
 	    try {
 	      const apiUrl = urlJoin(appconfig.API_BASE_URL, 'users', userId, 'roles');
 	      const result = await axios.get(apiUrl);	      
-	      console.log('axios: get apiUrl: ', result.data);
-	      console.log('axios: selectedRoles: ', v.selectedRoles);
 	      for (let i = 0; i < result.data.length; i++) {
-	        Vue.set(this.selectedRoles, i, result.data[i]);
+	    	let roleData = { key: result.data[i].key, value: result.data[i].value, checked: true };
+	        Vue.set(this.selectedRoles, i, roleData);
 	      }
 	    } catch (ex) {
 	      console.error('Error while retrieving user roles: ', ex);
