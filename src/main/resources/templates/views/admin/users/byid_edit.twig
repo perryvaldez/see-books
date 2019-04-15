@@ -53,7 +53,9 @@
   </div>
   <input type="hidden" name="serializedOrigValues" value="{{ userForm.serializedOrigValues }}" />
   <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" /> 
-  <!-- role-dialog :open="showRoleDialog" @on-request-close="handleRequestClose" @on-save="handleSave" / --> 
+  <div>
+    <role-dialog :open="showRoleDialog" @on-request-close="handleRequestClose" @on-save="handleSave" />
+  </div>
 </form>
 
 {% endautoescape %}
