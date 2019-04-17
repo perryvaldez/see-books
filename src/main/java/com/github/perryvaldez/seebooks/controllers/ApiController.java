@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.perryvaldez.seebooks.datalayer.KeyUtilities;
@@ -47,4 +48,13 @@ public class ApiController {
 		return roles;
 	}
 
+	@GetMapping("/api/roles")   // /api/roles?exceptids=10,12,16,22
+	@ResponseBody
+	public List<KeyValuePair<String, String>> getAvailableRoles(@RequestParam(name = "exceptids", required = false) String exceptIds) {
+		List<KeyValuePair<String, String>> roles = new ArrayList<KeyValuePair<String, String>>();
+		
+		// TODO
+		
+		return roles;
+	}
 }
