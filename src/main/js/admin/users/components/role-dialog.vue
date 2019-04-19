@@ -4,10 +4,22 @@
 
       <md-dialog-content>
         <p>Select the roles to associate with the user:</p>
+        
+        <div id="role-list">
+          <div v-for="(role, index) in roles" :key="role.key">
+              <label class="role-label">
+                <input type="checkbox" 
+                       :name="`roleIds[${index}]`" 
+                       :value="role.key" 
+                       v-model="roles[index].checked" 
+                /> {{ role.value }}
+              </label>
+          </div>          
+        </div>
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="$emit('on-save', $event)">Save</md-button>
+        <md-button class="md-primary" @click="$emit('on-request-select', $event)">Select</md-button>
         <md-button class="md-primary" @click="$emit('on-request-close', $event)">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
@@ -27,27 +39,33 @@ Vue.use(MdButton);
 
 const component = {
   name: 'RoleDialog',
-  data: () => ({}),
+  data: () => ({
+    roles: [],
+  }),
   props: {
     open: Boolean,
     selectedRoleIds: Array,
   },
-  updated: async function () {
-	console.log('role-dialog: updated: open: ', this.open);
-	console.log('role-dialog: updated: selectedRoleIds: ', this.selectedRoleIds);
-	console.log('role-dialog: updated: exceptids: ', this.selectedRoleIds.join(','));
-	
-	if (this.open) {
-		let api = 'roles';
-		
-		if (this.selectedRoleIds && this.selectedRoleIds.length > 0) {
-			api = `roles?exceptids=${encodeURIComponent(this.selectedRoleIds.join(','))}`;
-		}
-		
-	    const apiUrl = urlJoin(appconfig.API_BASE_URL, api);
-	    const result = await axios.get(apiUrl);
-	    console.log('role-dialog: updated: axios result: ', result.data);		
-	}
+  watch: {
+    open: async function (newOpen, oldOpen) {
+      if (newOpen && (newOpen !== oldOpen)) {
+        let api = 'roles';
+          
+        if (this.selectedRoleIds && this.selectedRoleIds.length > 0) {
+          api = `roles?exceptids=${encodeURIComponent(this.selectedRoleIds.join(','))}`;
+        }
+          
+        const apiUrl = urlJoin(appconfig.API_BASE_URL, api);
+        const result = await axios.get(apiUrl);
+              
+        this.roles.length = 0; // Clear the array
+        for (let i = 0; i < result.data.length; i++) {
+          console.log('role-dialog: data: ', result.data[i]);
+          let roleData = { key: result.data[i].key, value: result.data[i].value, checked: false };
+          this.roles.push(roleData);
+        }    	  
+      }
+    }	  
   },
 };
 
@@ -57,5 +75,9 @@ export default component;
 <style lang="scss" scoped>
 .md-dialog {
   width: 500px;
+}
+
+#role-list {
+  margin-top: 16px;
 }
 </style>
