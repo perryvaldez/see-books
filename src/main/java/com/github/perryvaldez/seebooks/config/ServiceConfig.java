@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaRoleRepository;
 import com.github.perryvaldez.seebooks.datalayer.impl.jpa.JpaUserRepository;
+import com.github.perryvaldez.seebooks.services.RoleService;
 import com.github.perryvaldez.seebooks.services.UserService;
+import com.github.perryvaldez.seebooks.services.impl.DbNumRoleService;
 import com.github.perryvaldez.seebooks.services.impl.DbNumUserService;
 
 @Configuration
@@ -27,5 +29,11 @@ public class ServiceConfig {
 	public UserService userService() {
 		SessionFactory sessionFactory = this.entityManagerFactory.unwrap(SessionFactory.class);
 		return new DbNumUserService(this.userRepository, this.roleRepository, sessionFactory);
+	}
+	
+	@Bean
+	public RoleService roleService() {
+		SessionFactory sessionFactory = this.entityManagerFactory.unwrap(SessionFactory.class);
+		return new DbNumRoleService(this.roleRepository, sessionFactory);
 	}
 }

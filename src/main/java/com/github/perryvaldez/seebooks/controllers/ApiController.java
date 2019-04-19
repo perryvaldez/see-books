@@ -1,7 +1,9 @@
 package com.github.perryvaldez.seebooks.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +18,7 @@ import com.github.perryvaldez.seebooks.models.Role;
 import com.github.perryvaldez.seebooks.models.User;
 import com.github.perryvaldez.seebooks.models.types.KeyType;
 import com.github.perryvaldez.seebooks.models.types.KeyValuePair;
+import com.github.perryvaldez.seebooks.services.RoleService;
 import com.github.perryvaldez.seebooks.services.UserService;
 
 @Controller
@@ -24,11 +27,13 @@ public class ApiController {
 	private static final Logger LOGGER = LogManager.getLogger(ApiController.class);
 	
 	private UserService userService;
+	private RoleService roleService;
 	private KeyUtilities keyUtil;
 	
-	public ApiController(UserService userService, KeyUtilities keyUtil) {
+	public ApiController(UserService userService, RoleService roleService, KeyUtilities keyUtil) {
 		this.userService = userService;
 		this.keyUtil = keyUtil;
+		this.roleService = roleService;
 	}
 	
 	@GetMapping("/api/users/{id}/roles")
@@ -53,8 +58,24 @@ public class ApiController {
 	public List<KeyValuePair<String, String>> getAvailableRoles(@RequestParam(name = "exceptids", required = false) String exceptIds) {
 		List<KeyValuePair<String, String>> roles = new ArrayList<KeyValuePair<String, String>>();
 		
-		// TODO
+        String[] ids = new String[0];
+        
+        if (exceptIds != null) {
+            ids = exceptIds.split("\\s*,\\s*");
+        }
+        
+        List<KeyType> idList = Arrays.asList(ids).stream()
+        		.map(id -> this.keyUtil.makeKey(id))
+        		.collect(Collectors.toList())
+        		; 
 		
+        List<Role> roleList = this.roleService.getRolesExceptIds(idList);
+        
+        roles = roleList.stream()
+        		.map(role -> new KeyValuePair<String, String>(role.getId().serialize(), role.getName()))
+        		.collect(Collectors.toList())
+        		;
+        
 		return roles;
 	}
 }
