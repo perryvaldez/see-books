@@ -16,6 +16,9 @@
 <script>
 import Vue from 'vue';
 import { MdDialog, MdDialogTitle, MdDialogActions, MdButton, MdDialogContent } from 'vue-material/dist/components';
+import axios from 'axios';
+import urlJoin from 'url-join';
+import appconfig from '../../../appconfig';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 
@@ -29,8 +32,22 @@ const component = {
     open: Boolean,
     selectedRoleIds: Array,
   },
-  updated: function () {
+  updated: async function () {
+	console.log('role-dialog: updated: open: ', this.open);
 	console.log('role-dialog: updated: selectedRoleIds: ', this.selectedRoleIds);
+	console.log('role-dialog: updated: exceptids: ', this.selectedRoleIds.join(','));
+	
+	if (this.open) {
+		let api = 'roles';
+		
+		if (this.selectedRoleIds && this.selectedRoleIds.length > 0) {
+			api = `roles?exceptids=${encodeURIComponent(this.selectedRoleIds.join(','))}`;
+		}
+		
+	    const apiUrl = urlJoin(appconfig.API_BASE_URL, api);
+	    const result = await axios.get(apiUrl);
+	    console.log('role-dialog: updated: axios result: ', result.data);		
+	}
   },
 };
 

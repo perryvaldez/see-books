@@ -21,8 +21,8 @@ const run = (element) => {
 	    	v.showRoleDialog = false;
 	    },
 	    
-	    getCheckedRoles: function () {
-	    	return this.selectedRoles.filter(item => item.checked).map(item => item.key);
+	    getAvailableRoles: function () {
+	    	return this.selectedRoles.map(item => item.key);
 	    },
 	    
 	    handleSave: (e) => {
